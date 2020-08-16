@@ -152,7 +152,7 @@ public class PetHandler {
             }
         }
         MaplePet pet = c.getPlayer().getPet(slot);
-        int tick = slea.readInt();
+        slea.readInt();
         short itemPos = slea.readShort();
         final int itemId = slea.readInt();
         IItem toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(itemPos);

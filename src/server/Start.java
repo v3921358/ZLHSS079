@@ -20,6 +20,7 @@ import java.util.Map;
 import server.Timer.*;
 import server.events.MapleOxQuizFactory;
 import server.life.MapleLifeFactory;
+import server.maps.MapleMapFactory;
 import server.quest.MapleQuest;
 import tools.FileoutputUtil;
 import tools.StringUtil;
@@ -147,6 +148,7 @@ public class Start {
             System.out.println("SpeedRunner错误:" + e);
         }
         World.registerRespawn();
+        MapleMapFactory.loadCustomLife();
         LoginServer.setOn();
         System.out.println("\r\n经验倍率:" + Integer.parseInt(ServerProperties.getProperty("ZlhssMS.Exp")) + "  物品倍率：" + Integer.parseInt(ServerProperties.getProperty("ZlhssMS.Drop")) + "  金币倍率" + Integer.parseInt(ServerProperties.getProperty("ZlhssMS.Meso")));
         System.out.println("\r\n当前开放职业: "
@@ -159,7 +161,7 @@ public class Start {
     //gui启动
     public void startServer() throws InterruptedException {
         Check = false;
-         Start.checkSingleInstance();//检测是否只启动一个进程
+        Start.checkSingleInstance();//检测是否只启动一个进程
         if (Boolean.parseBoolean(ServerProperties.getProperty("ZlhssMS.Admin", "true"))) {
             System.out.println("已开启仅管理员登录模式");
         }
@@ -258,6 +260,7 @@ public class Start {
             System.out.println("SpeedRunner错误:" + e);
         }
         World.registerRespawn();
+        MapleMapFactory.loadCustomLife();
         LoginServer.setOn();
         System.out.println("\r\n经验倍率:" + Integer.parseInt(ServerProperties.getProperty("ZlhssMS.Exp")) + "  物品倍率：" + Integer.parseInt(ServerProperties.getProperty("ZlhssMS.Drop")) + "  金币倍率" + Integer.parseInt(ServerProperties.getProperty("ZlhssMS.Meso")));
         System.out.println("\r\n当前开放职业: "
