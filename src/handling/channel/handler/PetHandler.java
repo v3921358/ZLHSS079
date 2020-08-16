@@ -27,6 +27,7 @@ import client.MapleClient;
 import client.MapleCharacter;
 import client.MapleDisease;
 import client.inventory.ExpTable;
+import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import constants.GameConstants;
@@ -151,10 +152,20 @@ public class PetHandler {
             }
         }
         MaplePet pet = c.getPlayer().getPet(slot);
-        slea.readInt();
-        slea.readShort();
-        int itemId = slea.readInt();
+        int tick = slea.readInt();
+        short itemPos = slea.readShort();
+        final int itemId = slea.readInt();
+        IItem toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(itemPos);
 
+        if (toUse == null || toUse.getItemId() != itemId || (itemId != 2120000 && itemId != 2120008)) {
+            c.getPlayer().dropMessage(1, "Error ItemId");
+            c.sendPacket(MaplePacketCreator.enableActions());
+            return;
+        }
+        if (pet == null) {
+            c.sendPacket(MaplePacketCreator.enableActions());
+            return;
+        }
         boolean gainCloseness = false;
 
         if (Randomizer.nextInt(101) > 50) {
