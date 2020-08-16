@@ -3767,11 +3767,16 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     public void sendMacros() {
+        boolean packet = false;
         for (int i = 0; i < 5; i++) {
             if (skillMacros[i] != null) {
+                packet = true;
                 client.getSession().write(MaplePacketCreator.getMacros(skillMacros));
                 break;
             }
+        }
+        if (!packet) {
+            client.getSession().write(MaplePacketCreator.getMacros(skillMacros));
         }
     }
 
