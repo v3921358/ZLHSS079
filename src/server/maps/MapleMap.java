@@ -1968,7 +1968,6 @@ public final class MapleMap {
         if (chr.getMapId() >= 140090100 && chr.getMapId() <= 140090500 || chr.getJob() == 1000 && chr.getMapId() != 130030000) {
             chr.getClient().getSession().write(MaplePacketCreator.spawnTutorialSummon(1));
         }
-        chr.startMapEffect(chr.getMap().getMapName(), 5120016, 5000);
         if (!onUserEnter.equals("")) {
             MapScriptMethods.startScript_User(chr.getClient(), onUserEnter);
             //  MapScriptManager.getInstance().getMapScript(chr.getClient(), onUserEnter, false);
