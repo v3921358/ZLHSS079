@@ -1387,7 +1387,7 @@ public class World {
     }
 
     public static void registerRespawn() {
-        WorldTimer.getInstance().register(new Respawn(), 3000); //divisible by 9000 if possible.
+        WorldTimer.getInstance().register(new Respawn(), 1000); //divisible by 9000 if possible.
         //3000 good or bad? ive no idea >_>
         //buffs can also be done, but eh
 
@@ -1430,7 +1430,7 @@ public class World {
                 handleCooldowns(chr, numTimes, hurt);
             }
         }
-        if (numTimes % 10 == 0 && (map.getId() == 220080001 && map.playerCount() == 0)) {
+        if (numTimes % 30 == 0 && (map.getId() == 220080001 && map.playerCount() == 0)) {
             ChannelServer.getInstance(map.getChannel()).getMapFactory().getMap(220080000).resetReactors();
         }
     }
@@ -1484,7 +1484,7 @@ public class World {
                 chr.dispelDebuff(m.disease);
             }
         }
-        if (numTimes % 20 == 0) { //we're parsing through the characters anyway (:
+        if (numTimes % 60 == 0) { //we're parsing through the characters anyway (:
             for (MaplePet pet : chr.getPets()) {
                 if (pet.getSummoned()) {
                     if (pet.getPetItemId() == 5000054 && pet.getSecondsLeft() > 0) {
