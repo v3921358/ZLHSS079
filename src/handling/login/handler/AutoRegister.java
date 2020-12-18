@@ -34,40 +34,20 @@ public class AutoRegister {
 
     public static void createAccount(String login, String pwd, String eip, String macs) {
         String sockAddr = eip;
-        Connection con;
-
         try {
-            con = DatabaseConnection.getConnection();
+            Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement("INSERT INTO accounts (name, password, email, birthday, macs, SessionIP) VALUES (?, ?, ?, ?, ?, ?)");
+            ps.setString(1, login);
+            ps.setString(2, LoginCrypto.hexSha1(pwd));
+            ps.setString(3, "autoregister@mail.com");
+            ps.setString(4, "2016-04-10");
+            ps.setString(5, macs);
+            ps.setString(6, "/" + sockAddr.substring(1, sockAddr.lastIndexOf(':')));
+            ps.executeUpdate();
+            success = true;
+            mac = true;
         } catch (Exception ex) {
             System.out.println(ex);
-            return;
-        }
-
-        try {
-            ResultSet rs;
-            PreparedStatement ipc = con.prepareStatement("SELECT macs FROM accounts WHERE macs = ?");
-            ipc.setString(1, macs);
-            rs = ipc.executeQuery();
-            if (rs.first() == false || rs.last() == true && rs.getRow() < ACCOUNTS_PER_MAC) {
-                PreparedStatement ps = con.prepareStatement("INSERT INTO accounts (name, password, email, birthday, macs, SessionIP) VALUES (?, ?, ?, ?, ?, ?)");
-                ps.setString(1, login);
-                ps.setString(2, LoginCrypto.hexSha1(pwd));
-                ps.setString(3, "autoregister@mail.com");
-                ps.setString(4, "2016-04-10");
-                ps.setString(5, macs);
-                ps.setString(6, "/" + sockAddr.substring(1, sockAddr.lastIndexOf(':')));
-                ps.executeUpdate();
-                success = true;
-            }
-            //  
-            //  ipc.close();
-            if (rs.getRow() >= ACCOUNTS_PER_MAC) {
-                mac = false;
-            }
-            rs.close();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-            return;
         }
     }
 }
