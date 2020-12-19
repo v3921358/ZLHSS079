@@ -85,7 +85,7 @@ public class SpawnPoint extends Spawns {
         }
         // regular spawnpoints should spawn a maximum of 3 monsters; immobile spawnpoints or spawnpoints with mobtime a
         // maximum of 1
-        if (((mobTime != 0 || immobile) && spawnedMonsters.get() > 0) || spawnedMonsters.get() > 1) {
+        if (((mobTime != 0 || immobile) && spawnedMonsters.get() > 0) || spawnedMonsters.get() > 0) {
             return false;
         }
         return nextPossibleSpawn <= System.currentTimeMillis();

@@ -620,7 +620,7 @@ public final class MapleMap {
              * for (MapleCharacter c : getCharactersThreadsafe()) {
              * c.finishAchievement(16); }
              */
-           // FileoutputUtil.log(FileoutputUtil.Horntail_Log, MapDebug_Log());
+            // FileoutputUtil.log(FileoutputUtil.Horntail_Log, MapDebug_Log());
             if (speedRunStart > 0) {
                 type = SpeedRunType.Horntail;
             }
@@ -714,32 +714,32 @@ public final class MapleMap {
             if (sqd != null) {
                 doShrine(true);
             }
-           // FileoutputUtil.log(FileoutputUtil.Pinkbean_Log, MapDebug_Log());
-      //  } else if (mobid == 8800002 && mapid == 280030000) {
+            // FileoutputUtil.log(FileoutputUtil.Pinkbean_Log, MapDebug_Log());
+            //  } else if (mobid == 8800002 && mapid == 280030000) {
             /*
              * for (MapleCharacter c : getCharactersThreadsafe()) {
              * c.finishAchievement(15); }
              */
             //FileoutputUtil.log(FileoutputUtil.Zakum_Log, MapDebug_Log());
-       //     if (speedRunStart > 0) {
-      //          type = SpeedRunType.Zakum;
-      //      }
-      //      if (sqd != null) {
-      //          doShrine(true);
-      //      }
-       // } else if (mobid == 8800102 && mapid == 280030001) {
+            //     if (speedRunStart > 0) {
+            //          type = SpeedRunType.Zakum;
+            //      }
+            //      if (sqd != null) {
+            //          doShrine(true);
+            //      }
+            // } else if (mobid == 8800102 && mapid == 280030001) {
             /*
              * for (MapleCharacter c : getCharactersThreadsafe()) {
              * c.finishAchievement(23); }
              */
-         //   FileoutputUtil.log(FileoutputUtil.Zakum_Log, MapDebug_Log());
-         //   if (speedRunStart > 0) {
-        //        type = SpeedRunType.Chaos_Zakum;
-         //   }
+            //   FileoutputUtil.log(FileoutputUtil.Zakum_Log, MapDebug_Log());
+            //   if (speedRunStart > 0) {
+            //        type = SpeedRunType.Chaos_Zakum;
+            //   }
 
-        //    if (sqd != null) {
-        //        doShrine(true);
-        //    }
+            //    if (sqd != null) {
+            //        doShrine(true);
+            //    }
         } else if (mobid >= 8800003 && mobid <= 8800010) {
             boolean makeZakReal = true;
             final Collection<MapleMonster> monsters = getAllMonstersThreadsafe();
@@ -1957,7 +1957,7 @@ public final class MapleMap {
                 broadcastMessage(chr, PetPacket.showPet(chr, pet, false, false), false);
             }
         }
-        
+
         if (hasForcedEquip()) {
             chr.getClient().getSession().write(MaplePacketCreator.showForcedEquip());
         }
@@ -2864,10 +2864,10 @@ public final class MapleMap {
                 mo.sendSpawnData(chr.getClient());
             }
         } else // monster left view range
-         if (mo.getType() != MapleMapObjectType.SUMMON && mo.getPosition().distanceSq(chr.getPosition()) > GameConstants.maxViewRangeSq()) {
-                chr.removeVisibleMapObject(mo);
-                mo.sendDestroyData(chr.getClient());
-            }
+        if (mo.getType() != MapleMapObjectType.SUMMON && mo.getPosition().distanceSq(chr.getPosition()) > GameConstants.maxViewRangeSq()) {
+            chr.removeVisibleMapObject(mo);
+            mo.sendDestroyData(chr.getClient());
+        }
     }
 
     public void moveMonster(MapleMonster monster, Point reportedPos) {
@@ -2996,6 +2996,7 @@ public final class MapleMap {
             chr.getClient().getSession().write(MaplePacketCreator.serverNotice(5, "[系统奖励] 挂机获得[" + chr.getLevel() * 15 + "] 经验!"));
         }
     }
+
     public List<MapleCharacter> getCharactersIntersect(Rectangle box) {
         List ret = new ArrayList();
         this.charactersLock.readLock().lock();
@@ -3011,7 +3012,6 @@ public final class MapleMap {
         return ret;
     }
 
-
     public boolean isPvpMap() {
         return this.mapid == 910000013;//PK地图
     }
@@ -3023,7 +3023,7 @@ public final class MapleMap {
     public boolean isGuildPvpMap() {
         return (this.mapid == 910000021) || (this.mapid == 910000022);
     }
-    
+
     private class ActivateItemReactor implements Runnable {
 
         private MapleMapItem mapitem;
@@ -3080,22 +3080,12 @@ public final class MapleMap {
             }
         } else {
             final int numShouldSpawn = maxRegularSpawn - spawnedMonstersOnMap.get();
-            if (numShouldSpawn > 0) {
-                int spawned = 0;
-
-                final List<Spawns> randomSpawn = new ArrayList<Spawns>(monsterSpawn);
+            if (numShouldSpawn > 0 && monsterSpawn.size() > 0) {
+                final List<Spawns> randomSpawn = new ArrayList<>(monsterSpawn);
                 Collections.shuffle(randomSpawn);
-
                 for (Spawns spawnPoint : randomSpawn) {
-                    if ((!isSpawns) && (spawnPoint.getMobTime() > 0)) {
-                        continue;
-                    }
                     if (spawnPoint.shouldSpawn() || GameConstants.isForceRespawn(mapid)) {
                         spawnPoint.spawnMonster(this);
-                        spawned++;
-                    }
-                    if (spawned >= numShouldSpawn) {
-                        break;
                     }
                 }
             }
