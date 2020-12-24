@@ -459,48 +459,50 @@ public final class MapleMap {
             chServerrate = ChannelServer.getInstance(channel).getBossDropRate();
         }
         final MapleMonsterInformationProvider mi = MapleMonsterInformationProvider.getInstance();
-
-        final List<MonsterDropEntry> dropEntry = mi.retrieveDrop(mob.getId());
-        Collections.shuffle(dropEntry);
-        for (final MonsterDropEntry de : dropEntry) {
-            if (de.itemId == mob.getStolen()) {
-                continue;
-            }
-            int Rand = Randomizer.nextInt(999999);
-            int part1 = de.chance;
-            int part2 = chServerrate;
-            int part3 = chr.getDropMod();
-            int part4 = (int) (chr.getStat().dropBuff / 100.0);
-            int part5 = (int) (showdown / 100.0);
-            int last = part1 * part2 * part3 * part4 * part5;
-            if (Rand < last) {
-                if (droptype == 3) {
-                    pos.x = (mobpos + (d % 2 == 0 ? (40 * (d + 1) / 2) : -(40 * (d / 2))));
-                } else {
-                    pos.x = (mobpos + ((d % 2 == 0) ? (25 * (d + 1) / 2) : -(25 * (d / 2))));
+        final List<MonsterDropEntry> allDropEntry = mi.retrieveDrop(mob.getId());
+        if (allDropEntry != null) {
+            final List<MonsterDropEntry> dropEntry = new ArrayList<>(allDropEntry);
+            Collections.shuffle(dropEntry);
+            for (final MonsterDropEntry de : dropEntry) {
+                if (de.itemId == mob.getStolen()) {
+                    continue;
                 }
-                if (de.itemId == 0) { // meso
+                int Rand = Randomizer.nextInt(999999);
+                int part1 = de.chance;
+                int part2 = chServerrate;
+                int part3 = chr.getDropMod();
+                int part4 = (int) (chr.getStat().dropBuff / 100.0);
+                int part5 = (int) (showdown / 100.0);
+                int last = part1 * part2 * part3 * part4 * part5;
+                if (Rand < last) {
+                    if (droptype == 3) {
+                        pos.x = (mobpos + (d % 2 == 0 ? (40 * (d + 1) / 2) : -(40 * (d / 2))));
+                    } else {
+                        pos.x = (mobpos + ((d % 2 == 0) ? (25 * (d + 1) / 2) : -(25 * (d / 2))));
+                    }
+                    if (de.itemId == 0) { // meso
 //                    int mesos = Randomizer.nextInt(1 + Math.abs(de.Maximum - de.Minimum)) + de.Minimum;
 //                    if (mesos > 0) {
 //                        spawnMobMesoDrop((int) (mesos * (chr.getStat().mesoBuff / 100.0) * chr.getDropMod() * cmServerrate), calcDropPos(pos, mob.getPosition()), mob, chr, false, droptype);
 //                    }
-                } else {
-                    if (GameConstants.getInventoryType(de.itemId) == MapleInventoryType.EQUIP) {
-                        idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
                     } else {
-                        final int range = Math.abs(de.Maximum - de.Minimum);
-                        idrop = new Item(de.itemId, (byte) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(range <= 0 ? 1 : range) + de.Minimum : 1), (byte) 0);
+                        if (GameConstants.getInventoryType(de.itemId) == MapleInventoryType.EQUIP) {
+                            idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
+                        } else {
+                            final int range = Math.abs(de.Maximum - de.Minimum);
+                            idrop = new Item(de.itemId, (byte) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(range <= 0 ? 1 : range) + de.Minimum : 1), (byte) 0);
 
+                        }
+                        if (Randomizer.nextInt(100) <= 7 && !mob.getStats().isBoss() && chr.getEventInstance() == null) {
+                            idrop = new Item(4001126, (byte) 0, (short) 1, (byte) 0);
+                        }
+                        if (Randomizer.nextInt(100) <= 10 && chr.getQuestStatus(28172) == 1) {
+                            idrop = new Item(4001341, (byte) 0, (short) 1, (byte) 0);
+                        }
+                        spawnMobDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, chr, droptype, de.questid);
                     }
-                    if (Randomizer.nextInt(100) <= 7 && !mob.getStats().isBoss() && chr.getEventInstance() == null) {
-                        idrop = new Item(4001126, (byte) 0, (short) 1, (byte) 0);
-                    }
-                    if (Randomizer.nextInt(100) <= 10 && chr.getQuestStatus(28172) == 1) {
-                        idrop = new Item(4001341, (byte) 0, (short) 1, (byte) 0);
-                    }
-                    spawnMobDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, chr, droptype, de.questid);
+                    d++;
                 }
-                d++;
             }
         }
 

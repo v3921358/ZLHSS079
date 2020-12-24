@@ -94,7 +94,7 @@ public class MapleMonsterInformationProvider {
         if (drops.containsKey(monsterId)) {
             return drops.get(monsterId);
         }
-        final List<MonsterDropEntry> ret = new LinkedList<MonsterDropEntry>();
+        final List<MonsterDropEntry> ret = new LinkedList<>();
 
         PreparedStatement ps = null;
         ResultSet rs = null;
