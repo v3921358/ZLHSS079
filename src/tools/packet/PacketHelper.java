@@ -154,7 +154,6 @@ public class PacketHelper {
 
     public static final void addRingInfo(final MaplePacketLittleEndianWriter mplew, final MapleCharacter chr) {
 
-        mplew.writeShort(0);
         Pair<List<MapleRing>, List<MapleRing>> aRing = chr.getRings(true);
         List<MapleRing> cRing = aRing.getLeft();
         mplew.writeShort(cRing.size());
@@ -173,20 +172,13 @@ public class PacketHelper {
             mplew.writeLong(ring.getPartnerRingId());
             mplew.writeInt(ring.getItemId());
         }
-        mplew.writeShort(0);
-//        mplew.writeShort((short) (chr.getMarriageRing(false) != null ? 1 : 0));
-//        int marriageId = 30000;
-//        if (chr.getMarriageRing(false) != null) {
-//            mplew.writeInt(marriageId);
-//            mplew.writeInt(chr.getId());
-//            mplew.writeInt(chr.getMarriageRing(false).getPartnerChrId());
-//            mplew.writeShort(3);
-//            mplew.writeInt(chr.getMarriageRing(false).getRingId());
-//            mplew.writeInt(chr.getMarriageRing(false).getPartnerRingId());
-//            mplew.writeAsciiString(chr.getName(), 13);
-//            mplew.writeAsciiString(chr.getMarriageRing(false).getPartnerName(), 13);
-//        }
-
+        mplew.writeShort((short) (chr.getMarriageRing(false) != null ? 1 : 0));
+        if (chr.getMarriageRing(false) != null) {
+            mplew.writeInt(30000);
+            mplew.writeAsciiString(chr.getName(), 13);
+            mplew.writeInt(chr.getId());
+            mplew.writeInt(chr.getMarriageRing(false).getPartnerRingId());
+        }
     }
 
     public static void addInventoryInfo(MaplePacketLittleEndianWriter mplew, MapleCharacter chr) {
@@ -632,6 +624,7 @@ public class PacketHelper {
         addSkillInfo(mplew, chr);
         addCoolDownInfo(mplew, chr);
         addQuestInfo(mplew, chr);
+        mplew.writeShort(0);
         addRingInfo(mplew, chr);
         addRocksInfo(mplew, chr);
         addMonsterBookInfo(mplew, chr);

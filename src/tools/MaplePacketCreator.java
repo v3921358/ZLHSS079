@@ -1171,7 +1171,8 @@ public class MaplePacketCreator {
         addRingInfo(mplew, allrings);
         addRingInfo(mplew, allrings);
         addMarriageRingLook(mplew, chr);
-        mplew.writeShort(0);
+        mplew.write(0); // bool
+        mplew.write(0); // bool (1320006 skill)
         if (chr.getCarnivalParty() != null) {
             mplew.write(chr.getCarnivalParty().getTeam());
         } else if (chr.getMapId() == 109080000 || chr.getMapId() == 109080010) {
@@ -1828,18 +1829,14 @@ public class MaplePacketCreator {
         addRingInfo(mplew, allrings);
         addMarriageRingLook(mplew, chr);
         mplew.writeInt(0);
-        // mplew.writeZeroBytes(5); //probably marriage ring (1) -> charid to follow (4)
-        //  mplew.writeZeroBytes(1); //probably marriage ring (1) -> charid to follow (4)
         return mplew.getPacket();
     }
 
     private static void addMarriageRingLook(final MaplePacketLittleEndianWriter mplew, MapleCharacter chr) {
-
         mplew.write(chr.getMarriageRing(false) != null ? (byte) 1 : (byte) 0);
         if (chr.getMarriageRing(false) != null) {
             mplew.writeInt(chr.getId());
             mplew.writeInt(chr.getMarriageRing(false).getPartnerChrId());
-            mplew.writeInt(chr.getMarriageRing(false).getRingId());
         }
     }
 
@@ -1848,11 +1845,13 @@ public class MaplePacketCreator {
             System.out.println("addRingInfo--------------------");
         }
         mplew.write(rings.size() > 0 ? 1 : 0);
-        mplew.writeInt(rings.size());
-        for (MapleRing ring : rings) {
-            mplew.writeLong(ring.getRingId());
-            mplew.writeLong(ring.getPartnerRingId());
-            mplew.writeInt(ring.getItemId());
+        if (rings.size() > 0) {
+            mplew.writeInt(rings.size());
+            for (MapleRing ring : rings) {
+                mplew.writeLong(ring.getRingId());
+                mplew.writeLong(ring.getPartnerRingId());
+                mplew.writeInt(ring.getItemId());
+            }
         }
     }
 
