@@ -510,11 +510,11 @@ public class PacketHelper {
         //marriage rings arent cash items so dont have uniqueids, but we assign them anyway for the sake of rings
         mplew.write(hasUniqueId ? 1 : 0);
         if (hasUniqueId) {
-           // if (isPet) {
-           //     mplew.writeLong(item.getPet().getUniqueId());
-          //  } else {
+            if (item.getPet() != null) {
+                mplew.writeLong(item.getPet().getUniqueId());
+            } else {
                 mplew.writeLong(item.getUniqueId());
-          //  }
+            }
         }
 
         if (item.getPet() != null) { // Pet
@@ -659,21 +659,8 @@ public class PacketHelper {
         mplew.writeShort(0);
         mplew.writeShort(pet.getFlags());
         mplew.writeInt(pet.getPetItemId() == 5000054 && pet.getSecondsLeft() > 0 ? pet.getSecondsLeft() : 0); //in seconds, 3600 = 1 hr.
-        //mplew.writeShort(0);
         mplew.write(0);
         mplew.write(active ? pet.getSummoned() ? pet.getSummonedValue() : 0 : 0);//显示装备栏上宠物的位置
-        /*
-         * for (int i = 0; i < 4; i++) { mplew.write(0); //0x40 before, changed
-         * to 0? }
-         */
- /*
-         * if (pet.getPetItemId() == 5000054) { mplew.writeInt(0);
-         * mplew.writeInt(pet.getSecondsLeft() > 0 ? pet.getSecondsLeft() : 0);
-         * //in seconds, 3600 = 1 hr. mplew.writeShort(0); } else {
-         * mplew.writeShort(0); mplew.writeLong(item != null &&
-         * item.getExpiration() <= System.currentTimeMillis() ? 0 : 1); }
-         */
-//        mplew.writeZeroBytes(5); // 1C 5C 98 C6 0
     }
 
     /**
