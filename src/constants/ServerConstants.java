@@ -20,7 +20,7 @@
  */
 package constants;
 
-import handling.login.Balloon;
+import handling.login.handler.Balloon;
 import java.util.ArrayList;
 import java.util.List;
 import server.ServerProperties;
@@ -62,7 +62,7 @@ public class ServerConstants {
     public static List<Balloon> getBalloons() {
         if (lBalloon.isEmpty()) {
             lBalloon.add(new Balloon("[ZlhssMS服务端]致力于打造最完善的079", 236, 122));
-            lBalloon.add(new Balloon("购买请联系QQ：529926174", 0, 276));
+         /*   lBalloon.add(new Balloon("购买请联系QQ：529926174", 0, 276));*/
         }
         return lBalloon;
     }

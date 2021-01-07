@@ -452,7 +452,7 @@ public class MapleClient implements Serializable {
                 loggedIn = false;
                 return 7;
             }
-            updateLoginState(MapleClient.LOGIN_LOGGEDIN, getSessionIPAddress() == "/127.0.0.1" ? null : getSessionIPAddress());
+            updateLoginState(MapleClient.LOGIN_LOGGEDIN, /*getSessionIPAddress() == "/127.0.0.1" ? null :*/ getSessionIPAddress());
         } finally {
             login_mutex.unlock();
         }
@@ -502,10 +502,9 @@ public class MapleClient implements Serializable {
                         boolean updatePasswordHashtosha1 = false;
 
                         // Check if the passwords are correct here. :B
-                     
-                         // if (password_otp.equals(pwd)) { // Check if a
-                         // password upgrade is needed. loginok = 0;
-                          if ((LoginCryptoLegacy.isLegacyPassword(passhash)) && (LoginCryptoLegacy.checkPassword(pwd, passhash))) {
+                        // if (password_otp.equals(pwd)) { // Check if a
+                        // password upgrade is needed. loginok = 0;
+                        if ((LoginCryptoLegacy.isLegacyPassword(passhash)) && (LoginCryptoLegacy.checkPassword(pwd, passhash))) {
                             loginok = 0;
                             updatePasswordHash = true;
                         } else if ((salt == null) && (LoginCrypto.checkSha1Hash(passhash, pwd))) {
@@ -538,7 +537,7 @@ public class MapleClient implements Serializable {
         }
         return loginok;
     }
-     
+
     public int login(String login, String pwd, boolean ipMacBanned) {
         int loginok = 5;
         try {
@@ -575,7 +574,7 @@ public class MapleClient implements Serializable {
                     //如果卡号了，这个if会导致账号登陆不进去，为了解决卡号问题，把这里设置成永远false
                     //!ServerConfig.防卡号=true来控制强制登陆,为了让卡号了也能进游戏
                     //if (!ServerConstants.防卡号 && getLoginState() > MapleClient.LOGIN_NOTLOGGEDIN) { // already loggedin
-                        if (loginstate > MapleClient.LOGIN_NOTLOGGEDIN) { // already loggedin
+                    if (loginstate > MapleClient.LOGIN_NOTLOGGEDIN) { // already loggedin
                         loggedIn = false;
                         loginok = 7;
                     } else {
@@ -999,13 +998,33 @@ public class MapleClient implements Serializable {
                 }
             }
         }
-        if (!serverTransition && isLoggedIn()) {
+        if (!serverTransition && isLoggedIn() && getAccID() > 0) {
             updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN, getSessionIPAddress());
         }
     }
 
     public final String getSessionIPAddress() {
-        return session.getRemoteAddress().toString().split(":")[0];
+        if (session != null && session.getRemoteAddress() != null) {
+            return session.getRemoteAddress().toString().split(":")[0];
+        }
+        return getLastIPAddress();
+    }
+
+    public final String getLastIPAddress() {
+        String sessionIP = null;
+        try {
+            final PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT SessionIP FROM accounts WHERE id = ?");
+            ps.setInt(1, this.accId);
+            final ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                sessionIP = rs.getString("SessionIP");
+            }
+            rs.close();
+            ps.close();
+        } catch (final SQLException e) {
+            System.err.println("Failed in getLastIPAddress for client.");
+        }
+        return sessionIP == null ? "" : sessionIP;
     }
 
     public final boolean CheckIPAddress() {

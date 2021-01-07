@@ -1,4 +1,4 @@
-package handling.login;
+package handling.login.handler;
 
 public class Balloon {
 

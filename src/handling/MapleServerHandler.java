@@ -372,15 +372,17 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
 
         if (client != null) {
             try {
-                FileWriter fw = isLoggedIP(session);
+                /*   FileWriter fw = isLoggedIP(session);
                 if (fw != null) {
                     fw.write("=== Session Closed ===");
                     fw.write(nl);
                     fw.flush();
-                }
+                }*/
                 client.disconnect(true, cs);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             } finally {
-                session.close();
+                session.close(true);
                 session.removeAttribute(MapleClient.CLIENT_KEY);
             }
         }
@@ -1011,7 +1013,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 System.out.println("[未经处理的] 客户端包 [" + header.toString() + "] 发现了");
                 break;
         }
-     /*   if (c.getPlayer().getNX() >= 10) {
+        /*   if (c.getPlayer().getNX() >= 10) {
             c.getPlayer().modifyCSPoints(1, -10);
         } else {
             c.getPlayer().dropMessage("您的点卷已经消耗光了。无法再做任何操作");

@@ -771,6 +771,9 @@ public class ZlhssMS extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             if (Start.Check) {
+                if (System.getProperty("net.sf.odinms.wzpath") == null) {
+                    System.setProperty("net.sf.odinms.wzpath", "wz");
+                }
                 Start.instance.startServer();
                 String 输出 = "[服务器] 服务器启动成功！";
                 printChatLog(输出);
@@ -866,7 +869,7 @@ public class ZlhssMS extends javax.swing.JFrame {
         // TODO add your handling code here:
         boolean status = checkbox1.getState();
         ServerConstants.Super_password = status;
-        if(!status){
+        if (!status) {
             ServerConstants.superpw = "";
         } else {
             ServerConstants.superpw = jTextField26.getText();

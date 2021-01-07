@@ -167,8 +167,7 @@ public class InterServerHandler {
         final int state = c.getLoginState();
         boolean allowLogin = false;
         String allowLoginTip = null;
-        //进入这里可能是卡角色了
-        if (state == MapleClient.LOGIN_SERVER_TRANSITION || state == MapleClient.CHANGE_CHANNEL || state == MapleClient.LOGIN_NOTLOGGEDIN) {
+        if (state == MapleClient.LOGIN_SERVER_TRANSITION || state == MapleClient.CHANGE_CHANNEL) {
             List<String> charNames = c.loadCharacterNames(c.getWorld());
             allowLogin = !World.isCharacterListConnected(charNames);
             if (!allowLogin) {

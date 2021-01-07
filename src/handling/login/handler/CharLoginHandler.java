@@ -451,35 +451,8 @@ public class CharLoginHandler {
         }
         String ip = c.getSessionIPAddress();
         LoginServer.putLoginAuth(charId, ip.substring(ip.indexOf('/') + 1, ip.length()), c.getTempIP(), c.getChannel());
-        // c.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION, ip);
-        /*
-         * if (c.getLoginState() == 2) { c.updateLoginState(2, ip);
-         * System.out.println("输出登录2"); } else {
-         */
+        c.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION, c.getSessionIPAddress());
         c.getSession().write(MaplePacketCreator.getServerIP(Integer.parseInt(ChannelServer.getInstance(c.getChannel()).getIP().split(":")[1]), charId));
-
-        /*
-         * final String currentpw = c.getSecondPassword(); if (slea.available()
-         * != 0) { if (currentpw != null) { // Hack c.getSession().close();
-         * return; } final String setpassword = slea.readMapleAsciiString();
-         *
-         * if (setpassword.length() >= 4 && setpassword.length() <= 16) {
-         * c.setSecondPassword(setpassword); c.updateSecondPassword();
-         *
-         * if (!c.login_Auth(charId)) { c.getSession().close(); return; } } else
-         * { c.getSession().write(LoginPacket.secondPwError((byte) 0x14));
-         * return; } } else if (loginFailCount(c) || currentpw != null ||
-         * !c.login_Auth(charId)) { c.getSession().close(); return; }
-         */
-        //这句是我屏蔽的
-        //   String ip = c.getSessionIPAddress();
-        //   LoginServer.putLoginAuth(charId, ip.substring(ip.indexOf('/') + 1, ip.length()), c.getTempIP(), c.getChannel());
-        //   c.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION, c.getSessionIPAddress());        
-        //   System.out.println("··········A"+charId);
-        //    System.out.println("··········C"+c.getSessionIPAddress());
-        //    System.out.println("··········B"+ChannelServer.getInstance(c.getChannel()).getIP());
-        //    c.getSession().write(MaplePacketCreator.getServerIP(Integer.parseInt(ChannelServer.getInstance(c.getChannel()).getIP().split(":")[1]), charId));
-        //  c.getSession().write(MaplePacketCreator.getServerIP(0, charId));
     }
 
     public static final void Character_WithSecondPassword(final SeekableLittleEndianAccessor slea, final MapleClient c) {

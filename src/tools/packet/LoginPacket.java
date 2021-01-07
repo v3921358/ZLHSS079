@@ -30,7 +30,7 @@ import constants.GameConstants;
 import constants.ServerConstants;
 import handling.MaplePacket;
 import handling.SendPacketOpcode;
-import handling.login.Balloon;
+import handling.login.handler.Balloon;
 import handling.login.LoginServer;
 import tools.data.output.MaplePacketLittleEndianWriter;
 import tools.HexTool;
@@ -259,13 +259,12 @@ public class LoginPacket {
             mplew.write(serverId);
             mplew.writeShort(i - 1);
         }
-        /*mplew.writeShort(ServerConstants.getBalloons().size());
+        mplew.writeShort(ServerConstants.getBalloons().size());
         for (Balloon balloon : ServerConstants.getBalloons()) {
             mplew.writeShort(balloon.nX);
             mplew.writeShort(balloon.nY);
             mplew.writeMapleAsciiString(balloon.sMessage);
-        }*/
-        mplew.writeShort(0);
+        }
 
         //System.err.println(HexTool.toString(mplew.getPacket().getBytes()));
         return mplew.getPacket();
