@@ -3594,8 +3594,7 @@ public class MaplePacketCreator {
             lew.writeInt(partychar.getId());
         }
         for (MaplePartyCharacter partychar : partymembers) {
-            lew.writeAsciiString(StringUtil.getRightPaddedStr(partychar.getName(), '\000', 13));
-            // lew.writeAsciiString(partychar.getName(), 15);
+            lew.writeAsciiString(partychar.getName(), 13);
         }
         for (MaplePartyCharacter partychar : partymembers) {
             lew.writeInt(partychar.getJobId());
@@ -3622,7 +3621,6 @@ public class MaplePacketCreator {
             if (partychar.getChannel() == forchannel && !leaving) {
                 lew.writeInt(partychar.getDoorTown());
                 lew.writeInt(partychar.getDoorTarget());
-                //    lew.writeInt(partychar.getDoorSkill());
                 lew.writeInt(partychar.getDoorPosition().x);
                 lew.writeInt(partychar.getDoorPosition().y);
             } else {
@@ -3693,10 +3691,10 @@ public class MaplePacketCreator {
             System.out.println("partyPortal--------------------");
         }
         mplew.writeShort(SendPacketOpcode.PARTY_OPERATION.getValue());
-        mplew.writeShort(0x23);
+        mplew.writeShort(0x24);
+        mplew.write(0);
         mplew.writeInt(townId);
         mplew.writeInt(targetId);
-//        mplew.writeInt(skillId);
         mplew.writePos(position);
 
         return mplew.getPacket();
