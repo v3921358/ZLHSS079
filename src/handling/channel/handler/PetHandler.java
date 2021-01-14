@@ -157,7 +157,7 @@ public class PetHandler {
         final int itemId = slea.readInt();
         IItem toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(itemPos);
 
-        if (toUse == null || toUse.getItemId() != itemId || (itemId != 2120000 && itemId != 2120008)) {
+        if (toUse == null || toUse.getItemId() != itemId || itemId / 10000 != 212) {
             c.getPlayer().dropMessage(1, "Error ItemId");
             c.sendPacket(MaplePacketCreator.enableActions());
             return;
@@ -205,7 +205,7 @@ public class PetHandler {
 
             c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), slot, 1, false), true);
         }
-        MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, itemId, 1, true, false);
+        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, itemPos, (short) 1, true, false);
     }
 
     public static final void MovePet(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
