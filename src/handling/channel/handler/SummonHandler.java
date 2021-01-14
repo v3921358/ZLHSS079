@@ -114,28 +114,21 @@ public class SummonHandler {
     }
 
     public static final void DamageSummon(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
-      
-        int skillid = slea.readInt();
-         int unkByte = slea.readByte();
-         int damage = slea.readInt();
-         int monsterIdFrom = slea.readInt();
+
+        int objectId = slea.readInt();
+        int unkByte = slea.readByte();
+        int damage = slea.readInt();
+        int monsterIdFrom = slea.readInt();
         //       slea.readByte(); // stance
 
-
-        final Iterator<MapleSummon> iter = chr.getSummons().values().iterator();
-        if (SkillFactory.getSkill(skillid) != null) {
-            MapleSummon summon;
-            while (iter.hasNext()) {
-                summon = iter.next();
-                if (summon.isPuppet() && summon.getOwnerId() == chr.getId()) { //We can only have one puppet(AFAIK O.O) so this check is safe.
-                    summon.addHP((short) -damage);
-                    if (summon.getHP() <= 0) {
-                        chr.cancelEffectFromBuffStat(MapleBuffStat.PUPPET);
-                    }
-                    chr.getMap().broadcastMessage(chr, MaplePacketCreator.damageSummon(chr.getId(), skillid, damage, unkByte, monsterIdFrom), summon.getPosition());
-                    break;
-                }
+        MapleSummon summon = (MapleSummon) chr.getMap().getMapObject(objectId, MapleMapObjectType.SUMMON);
+        if (summon != null && summon.isPuppet() && summon.getOwnerId() == chr.getId()) { //We can only have one puppet(AFAIK O.O) so this check is safe.
+            summon.addHP((short) -damage);
+            if (summon.getHP() <= 0) {
+                chr.cancelEffectFromBuffStat(MapleBuffStat.PUPPET);
             }
+            chr.getMap().broadcastMessage(chr, MaplePacketCreator.damageSummon(chr.getId(), objectId, damage, unkByte, monsterIdFrom), summon.getPosition());
+
         }
     }
 
@@ -187,7 +180,7 @@ public class SummonHandler {
             allDamage.add(new SummonAttackEntry(mob, damage));
         }
         if (!summon.isChangedMap()) {
-        //    map.broadcastMessage(chr, MaplePacketCreator.summonAttack(summon.getOwnerId(), summon.getObjectId(), animation, allDamage), summon.getPosition());
+            //    map.broadcastMessage(chr, MaplePacketCreator.summonAttack(summon.getOwnerId(), summon.getObjectId(), animation, allDamage), summon.getPosition());
         }
         final ISkill summonSkill = SkillFactory.getSkill(summon.getSkill());
         final MapleStatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
@@ -213,7 +206,7 @@ public class SummonHandler {
                     chr.getClient().getSession().write(MobPacket.killMonster(mob.getObjectId(), 1));
                 }
             } else {
-            //    AutobanManager.getInstance().autoban(c, "High Summon Damage (" + toDamage + " to " + attackEntry.getMonster().getId() + ")");
+                //    AutobanManager.getInstance().autoban(c, "High Summon Damage (" + toDamage + " to " + attackEntry.getMonster().getId() + ")");
                 // TODO : Check player's stat for damage checking.
             }
         }
@@ -222,7 +215,7 @@ public class SummonHandler {
             chr.getMap().removeMapObject(summon);
             chr.removeVisibleMapObject(summon);
             chr.cancelEffectFromBuffStat(MapleBuffStat.SUMMON);
-          //  chr.cancelEffectFromBuffStat(MapleBuffStat.REAPER);
+            //  chr.cancelEffectFromBuffStat(MapleBuffStat.REAPER);
             //TODO: Multi Summoning, must do something about hack buffstat
         }
     }
