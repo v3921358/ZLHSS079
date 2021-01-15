@@ -326,7 +326,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         if (!isChannel) {
             ret.client.setChannel(ct.channel);
         }
-
+        ret.sg = ct.sg;
         ret.mount_id = ct.mount_id;
         ret.DebugMessage = ct.DebugMessage;
         ret.id = ct.characterid;

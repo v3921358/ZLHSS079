@@ -40,8 +40,8 @@ public class CharacterTransfer implements Externalizable {
     public int characterid, accountid, exp,
             beans, meso, hair, face, mapid, guildid,
             partyid, messengerid, mBookCover, dojo, ACash, MaplePoints,
-            mount_itemid, mount_exp, points, vpoints, marriageId,
-            familyid, seniorid, junior1, junior2, currentrep, totalrep, expression, constellation, blood, month, day, battleshipHP, prefix, mount_id, skillzq, bosslog, grname, jzname, mrsjrw, mrsgrw, mrsbossrw, mrfbrw, hythd, mrsgrwa, mrsbossrwa, mrfbrwa, mrsgrws, mrsbossrws, mrfbrws, mrsgrwas, mrsbossrwas, mrfbrwas, ddj, vip, djjl,qiandao;
+            mount_itemid, mount_exp, points, vpoints, marriageId, sg,
+            familyid, seniorid, junior1, junior2, currentrep, totalrep, expression, constellation, blood, month, day, battleshipHP, prefix, mount_id, skillzq, bosslog, grname, jzname, mrsjrw, mrsgrw, mrsbossrw, mrfbrw, hythd, mrsgrwa, mrsbossrwa, mrfbrwa, mrsgrws, mrsbossrws, mrfbrws, mrsgrwas, mrsbossrwas, mrfbrwas, ddj, vip, djjl, qiandao;
     public byte channel, dojoRecord, gender, gmLevel, guildrank, alliancerank, clonez, fairyExp, buddysize, world, initialSpawnPoint, skinColor, mount_level, mount_Fatigue, subcategory;
     public long lastfametime, TranferTime, lastGainHM;
     public String tempIP;
@@ -63,6 +63,7 @@ public class CharacterTransfer implements Externalizable {
     }
 
     public CharacterTransfer(final MapleCharacter chr) {
+        this.sg = chr.getsg();
         this.characterid = chr.getId();
         this.accountid = chr.getAccountID();
         this.accountname = chr.getClient().getAccountName();
