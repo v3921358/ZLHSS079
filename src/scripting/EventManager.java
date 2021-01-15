@@ -336,12 +336,12 @@ public class EventManager {
                     chrSize++;
                 }
             }
-            if (chrSize < squad.getType().i) {
-                squad.getLeader().dropMessage(5, new StringBuilder().append("远征队中人员少于 ").append(squad.getType().i).append(" 人，无法开始远征任务。注意必须队伍中的角色在线且在同一地图。当前人数: ").append(chrSize).toString());
-                return;
-            }
+//            if (chrSize < squad.getType().i) {
+//                squad.getLeader().dropMessage(5, new StringBuilder().append("远征队中人员少于 ").append(squad.getType().i).append(" 人，无法开始远征任务。注意必须队伍中的角色在线且在同一地图。当前人数: ").append(chrSize).toString());
+//                return;
+//            }
             if ((this.name.equals("CWKPQ")) && (squad.getJobs().size() < 5)) {
-                squad.getLeader().dropMessage(5, "远征队中成员职业的类型小于5种，无法开始远征任务。");
+                squad.getLeader().dropMessage(5, "远征队中成员职业的类型小于5种，无法开始CWKPQ任务。");
                 return;
             }
         }
