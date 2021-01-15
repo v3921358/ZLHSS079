@@ -57,7 +57,7 @@ import tools.data.output.MaplePacketLittleEndianWriter;
 
 public class PacketHelper {
 
-    private final static long FT_UT_OFFSET = 116444592000000000L; // EDT
+    private final static long FT_UT_OFFSET = 116445024000000000L; // EDT
     public final static long MAX_TIME = 150842304000000000L; //00 80 05 BB 46 E6 17 02
     public static final byte unk1[] = new byte[]{(byte) 0x00, (byte) 0x40, (byte) 0xE0, (byte) 0xFD};
     public static final byte unk2[] = new byte[]{(byte) 0x3B, (byte) 0x37, (byte) 0x4F, (byte) 0x01};
@@ -74,8 +74,7 @@ public class PacketHelper {
         if (realTimestamp == -1) {
             return MAX_TIME;
         }
-        long time = (realTimestamp / 1000); // convert to seconds
-        return ((time * 10000000) + FT_UT_OFFSET);
+        return ((realTimestamp * 10000) + 116445024000000000L);
     }
 
     public static long getFileTimestamp(long timeStampinMillis, boolean roundToMinutes) {
