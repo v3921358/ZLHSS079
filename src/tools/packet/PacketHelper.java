@@ -74,7 +74,7 @@ public class PacketHelper {
         if (realTimestamp == -1) {
             return MAX_TIME;
         }
-        return ((realTimestamp * 10000) + 116445024000000000L);
+        return ((realTimestamp * 10000) + FT_UT_OFFSET);
     }
 
     public static long getFileTimestamp(long timeStampinMillis, boolean roundToMinutes) {
