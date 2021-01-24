@@ -909,6 +909,9 @@ public class MapleInventoryManipulator {
             mods.add(new ModifyInventory(3, source));
             mods.add(new ModifyInventory(0, source.copy()));//to prevent crashes
         }
+        if (source.getItemId() == 1112804) {
+            dst = -13;
+        }
         source.setPosition(dst);
         chr.getInventory(MapleInventoryType.EQUIPPED).addFromDB(source);
         if (target != null) {

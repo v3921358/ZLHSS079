@@ -306,19 +306,6 @@ public class PacketHelper {
 
         final IItem cWeapon = equip.getItem((byte) -111);
         mplew.writeInt(cWeapon != null ? cWeapon.getItemId() : 0);
-
-        /*
-         * final IItem invA =
-         * chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -114);
-         * final IItem invB =
-         * chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -122);
-         * final IItem invC =
-         * chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -124);
-         * //final int peteqid = inv != null ? inv.getItemId() : 0;
-         * mplew.writeInt(invA != null ? invA.getItemId() : 0);
-         * mplew.writeInt(invB != null ? invB.getItemId() : 0);
-         * mplew.writeInt(invC != null ? invC.getItemId() : 0);
-         */
         for (int i = 0; i < 3; i++) {
             if (channelserver) {
                 mplew.writeInt(chr.getPet(i) != null ? chr.getPet(i).getPetItemId() : 0);

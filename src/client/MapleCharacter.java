@@ -4041,7 +4041,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
 
     public final void equipChanged() {
         map.broadcastMessage(this, MaplePacketCreator.updateCharLook(this), false);
-        map.broadcastMessage(MaplePacketCreator.loveEffect());
+//        map.broadcastMessage(MaplePacketCreator.loveEffect());
         stats.recalcLocalStats();
         if (getMessenger() != null) {
             World.Messenger.updateMessenger(getMessenger().getId(), getName(), client.getChannel());
@@ -5499,20 +5499,12 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             if (item.getRing() != null) {
                 ring = item.getRing();
                 ring.setEquipped(true);
-                if (GameConstants.isFriendshipRing(item.getItemId()) || GameConstants.isCrushRing(item.getItemId())) {
-                    if (equip) {
-                        if (GameConstants.isCrushRing(item.getItemId())) {
-                            crings.add(ring);
-                        } else if (GameConstants.isFriendshipRing(item.getItemId())) {
-                            frings.add(ring);
-                        }
-                    } else if (crings.isEmpty() && GameConstants.isCrushRing(item.getItemId())) {
-                        crings.add(ring);
-                    } else if (frings.isEmpty() && GameConstants.isFriendshipRing(item.getItemId())) {
-                        frings.add(ring);
-                    } //for 3rd person the actual slot doesnt matter, so we'll use this to have both shirt/ring same?
-                    //however there seems to be something else behind this, will have to sniff someone with shirt and ring, or more conveniently 3-4 of those
-                }
+                if (GameConstants.isCrushRing(item.getItemId())) {
+                    crings.add(ring);
+                } else if (GameConstants.isFriendshipRing(item.getItemId())) {
+                    frings.add(ring);
+                } //for 3rd person the actual slot doesnt matter, so we'll use this to have both shirt/ring same?
+                //however there seems to be something else behind this, will have to sniff someone with shirt and ring, or more conveniently 3-4 of those
             }
         }
         if (equip) {

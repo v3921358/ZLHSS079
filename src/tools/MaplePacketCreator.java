@@ -1828,7 +1828,7 @@ public class MaplePacketCreator {
         addRingInfo(mplew, allrings);
         addRingInfo(mplew, allrings);
         addMarriageRingLook(mplew, chr);
-        mplew.writeInt(0);
+        mplew.writeInt(0); // CompletedSetItemID
         return mplew.getPacket();
     }
 

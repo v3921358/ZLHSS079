@@ -1183,7 +1183,6 @@ public class GameConstants {
             case 1112800:
             case 1112801:
             case 1112802:
-            //  case 1112804:
             case 1112810: //new
             case 1112811: //new, doesnt work in friendship?
             case 1112812: //new, im ASSUMING it's friendship cuz of itemID, not sure.
@@ -1208,7 +1207,6 @@ public class GameConstants {
             case 1112007:
             case 1112012:
             case 1112015:
-            //case 1112804:
             case 1048000:
             case 1048001:
             case 1048002:
@@ -2699,7 +2697,7 @@ public class GameConstants {
             case 1112319:
             case 1112320:
             case 1112803:
-            //   case 1112804:
+            case 1112804:
             case 1112806:
             case 1112807:
             case 1112808:
@@ -3009,7 +3007,6 @@ public class GameConstants {
         }
         return false;
     }
-
 
     public static int getMountS(int s) {
         // int s = Randomizer.nextInt(316);

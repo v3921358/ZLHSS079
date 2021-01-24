@@ -2003,7 +2003,7 @@ public final class MapleMap {
         if (chr.getChalkboard() != null) {
             chr.getClient().getSession().write(MTSCSPacket.useChalkboard(chr.getId(), chr.getChalkboard()));
         }
-        broadcastMessage(MaplePacketCreator.loveEffect());
+//        broadcastMessage(MaplePacketCreator.loveEffect());
         if (timeLimit > 0 && getForcedReturnMap() != null && !chr.isClone()) {
             chr.startMapTimeLimitTask(timeLimit, getForcedReturnMap());
             if (ServerConstants.封包显示 || 进入地图开启显示数据) {
