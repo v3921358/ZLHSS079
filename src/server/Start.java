@@ -82,11 +82,11 @@ public class Start {
         System.out.println("====================================================-[ 加载NPC ]");
         long npctime = System.currentTimeMillis();
         MapleLifeFactory.loadQuestCounts();
-        System.out.println("NPC数据加载完成 耗时：" + (System.currentTimeMillis() - npctime) / 1000.0 + "秒");
+        System.out.println("任务数据加载完成 耗时：" + (System.currentTimeMillis() - npctime) / 1000.0 + "秒");
         System.out.println("====================================================-[ 加载任务 ]");
         long sjtime = System.currentTimeMillis();
         MapleQuest.initQuests();
-        System.out.println("任务数据加载完成 耗时：" + (System.currentTimeMillis() - sjtime) / 1000.0 + "秒");
+        System.out.println("任务数据II加载完成 耗时：" + (System.currentTimeMillis() - sjtime) / 1000.0 + "秒");
         //ItemMakerFactory.getInstance();//Loading ItemMakerFactory :::
         System.out.println("====================================================-[ 加载道具数据 ]");
         long jzdjtime = System.currentTimeMillis();
