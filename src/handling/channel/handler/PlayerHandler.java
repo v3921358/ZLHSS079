@@ -1090,29 +1090,13 @@ public class PlayerHandler {
     }
 
     public static final void MovePlayer(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
-//	slea.skip(5); // unknown
         if (chr == null) {
             return;
         }
         final Point Original_Pos = chr.getPosition(); // 4 bytes Added on v.80 MSEA
-        slea.skip(33);
-
-        /**
-         *
-         * FF FF 01 FF FF FF FF FF FF FF FF 2A 8E 66 CB 8E 7D 17 FC 4A BF D5 CE
-         * B4 FE D7 00 0B 00 B4 FE D7 00 00 00 00 00 71 00 04 96 00 00 B7 FE D7
-         * 00 54 00 00 00 71 00 02 3C 00 00 BB FE D7 00 0C 00 00 00 71 00 04 5A
-         * 00 14 0C 00 00 00 04 00 00 00 BB FE D6 00 0C 00 00 00 71 00 04 00 00
-         * 02 8A 02 00 00 06 00 00 00 CE FE D7 00 44 01 00 00 00 00 06 1E 00 00
-         * EA FE D7 00 84 00 00 00 71 00 04 78 00 00 EA FE D6 00 84 00 00 00 71
-         * 00 08 00 00 02 77 FF F2 FE 06 00 00 00 E1 FE C9 00 77 FF 6A FF 00 00
-         * 06 3C 00 11 00 00 40 04 00 00 00 00 00 B4 FE C9 00 EA FE D7 00 Now:
-         * D7 00 44 01 00 00 00 00 06 1E 00 00 EA FE D7 00 84 00 00 00 71 00 04
-         * 78 00 00 EA FE D6 00 84 00 00 00 71 00 08 00 00 02 77 FF F2 FE 06 00
-         * 00 00 E1 FE C9 00 77 FF 6A FF 00 00 06 3C 00 11 00 00 40 04 00 00 00
-         * 00 00 B4 FE C9 00 EA FE D7 00
-         */
-        // log.trace("Movement command received: unk1 {} unk2 {}", new Object[] { unk1, unk2 });
+        slea.skip(29);
+        slea.readShort();
+        slea.readShort();
         List<LifeMovementFragment> res;
         try {
             res = MovementParse.parseMovement(slea, 1);
@@ -1120,10 +1104,10 @@ public class PlayerHandler {
             System.out.println("AIOBE Type1:\n" + slea.toString(true));
             return;
         }
-
+        slea.skip(slea.readByte());
         if (res != null && c.getPlayer().getMap() != null) { // TODO more validation of input data
-            if (slea.available() < 13 || slea.available() > 26) {
-                System.out.println("slea.available != 13-26 (movement parsing error)\n" + slea.toString(true));
+            if (slea.available() > 0) {
+                System.out.println("slea.available > 0 (movement parsing error)\n" + slea.toString(true));
                 return;
             }
             final List<LifeMovementFragment> res2 = new ArrayList<LifeMovementFragment>(res);

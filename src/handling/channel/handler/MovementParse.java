@@ -61,19 +61,6 @@ public class MovementParse {
         for (byte i = 0; i < numCommands; i++) {
             final byte command = lea.readByte();
             switch (command) {//移动类型
-                case -1: {//下跳
-                    final short xpos = lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short unk = lea.readShort();
-                    final short fh = lea.readShort();
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
-                    final BounceMovement bm = new BounceMovement(command, new Point(xpos, ypos), duration, newstate);
-                    bm.setFH(fh);
-                    bm.setUnk(unk);
-                    res.add(bm);
-                    break;
-                }
                 case 0: // normal move
                 case 5:
                 case 17: // Float
@@ -88,9 +75,23 @@ public class MovementParse {
                     final AbsoluteLifeMovement alm = new AbsoluteLifeMovement(command, new Point(xpos, ypos), duration, newstate);
                     alm.setUnk(unk);
                     alm.setPixelsPerSecond(new Point(xwobble, ywobble));
-                    // log.trace("Move to {},{} command {} wobble {},{} ? {} state {} duration {}", new Object[] { xpos,
-                    // xpos, command, xwobble, ywobble, newstate, duration });
                     res.add(alm);
+                    break;
+                }
+                case 15: { // Jump Down
+                    final short xpos = lea.readShort();
+                    final short ypos = lea.readShort();
+                    final short xwobble = lea.readShort();
+                    final short ywobble = lea.readShort();
+                    final short unk = lea.readShort();
+                    final short fh = lea.readShort();
+                    final byte newstate = lea.readByte();
+                    final short duration = lea.readShort();
+                    final JumpDownMovement jdm = new JumpDownMovement(command, new Point(xpos, ypos), duration, newstate);
+                    jdm.setUnk(unk);
+                    jdm.setPixelsPerSecond(new Point(xwobble, ywobble));
+                    jdm.setFH(fh);
+                    res.add(jdm);
                     break;
                 }
                 case 1:
@@ -98,7 +99,10 @@ public class MovementParse {
                 case 6: // fj
                 case 12:
                 case 13: // Shot-jump-back thing
-                case 16: { // Float
+                case 16:
+                case 18:
+                case 19:
+                case 22: { // Float
                     final short xmod = lea.readShort();
                     final short ymod = lea.readShort();
                     final byte newstate = lea.readByte();
@@ -114,21 +118,6 @@ public class MovementParse {
                 case 7: // assaulter
                 case 8: // assassinate
                 case 9: // rush
-                case 14:
-                {
-                    final short xpos = lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short xwobble = lea.readShort();
-                    final short ywobble = lea.readShort();
-                    final byte newstate = lea.readByte();
-                    final TeleportMovement tm = new TeleportMovement(command, new Point(xpos, ypos), newstate);
-                    tm.setPixelsPerSecond(new Point(xwobble, ywobble));
-                    res.add(tm);
-                    break;
-                }
-                case 10: // change equip ???
-                    res.add(new ChangeEquipSpecialAwesome(command, lea.readByte()));
-                    break;
                 case 11: // chair
                 {
                     final short xpos = lea.readShort();
@@ -141,52 +130,19 @@ public class MovementParse {
                     res.add(cm);
                     break;
                 }
-                /*case 14: {
-                    final short xpos = lea.readShort();
-                    final short ypos = lea.readShort();
+                case 10: // change equip ???
+                    res.add(new ChangeEquipSpecialAwesome(command, lea.readByte()));
+                    break;
+                case 14: {
                     final short xwobble = lea.readShort();
                     final short ywobble = lea.readShort();
                     final short unk = lea.readShort();
-                    final short fh = lea.readShort();
-                    final short xoffset = lea.readShort();
-                    final short yoffset = lea.readShort();
                     final byte newstate = lea.readByte();
                     final short duration = lea.readShort();
-                    JumpDownMovement jdm = new JumpDownMovement(command, new Point(xpos, ypos), duration, newstate);
-                    jdm.setUnk(unk);
-                    jdm.setPixelsPerSecond(new Point(xwobble, ywobble));
-                    jdm.setOffset(new Point(xoffset, yoffset));
-                    jdm.setFH(fh);
-                    res.add(jdm);
-                    break;
-                }*/
-                case 15: { // Jump Down
-                    final short xpos = lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short xwobble = lea.readShort();
-                    final short ywobble = lea.readShort();
-                    final short unk = lea.readShort();
-                    final short fh = lea.readShort();
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
-                    final JumpDownMovement jdm = new JumpDownMovement(command, new Point(xpos, ypos), duration, newstate);
-                    jdm.setUnk(unk);
-                    jdm.setPixelsPerSecond(new Point(xwobble, ywobble));
-                    jdm.setFH(fh);
-
-                    res.add(jdm);
+                    final TeleportMovement tm = new TeleportMovement(command, new Point(xwobble, ywobble), duration, newstate, unk);
+                    res.add(tm);
                     break;
                 }
-                case 20:
-                case 21:
-                case 22: {
-                    final short unk = lea.readShort();
-                    final byte newstate = lea.readByte();
-                    final AranMovement acm = new AranMovement(command, new Point(10, 0), newstate, unk);
-                    res.add(acm);
-                }
-                case 18:
-                case 19:
                 default:
                     System.out.println("移动类型: " + kind + ", 剩下的 : " + (numCommands - res.size()) + " 新的移动类型 ID : " + command + ", 封包 : " + lea.toString(true));
                     return null;

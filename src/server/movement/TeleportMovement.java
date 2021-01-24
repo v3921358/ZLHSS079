@@ -26,8 +26,11 @@ import tools.data.output.LittleEndianWriter;
 
 public class TeleportMovement extends AbsoluteLifeMovement {
 
+    private int fh = 0;
+
     public TeleportMovement(int type, Point position, int duration, int newstate, int newfh) {
         super(type, position, duration, newstate);
+        fh = newfh;
     }
 
     public TeleportMovement(int type, Point position, int newstate) {
@@ -39,8 +42,8 @@ public class TeleportMovement extends AbsoluteLifeMovement {
         lew.write(getType());
         lew.writeShort(getPosition().x);
         lew.writeShort(getPosition().y);
-        lew.writeShort(getPixelsPerSecond().x);
-        lew.writeShort(getPixelsPerSecond().y);
+        lew.writeShort(fh);
         lew.write(getNewstate());
+        lew.writeShort(getDuration());;
     }
 }
