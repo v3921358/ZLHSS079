@@ -176,41 +176,11 @@ public class PacketHelper {
             mplew.writeInt(30000);
             mplew.writeAsciiString(chr.getName(), 13);
             mplew.writeInt(chr.getId());
-            mplew.writeInt(chr.getMarriageRing(false).getPartnerRingId());
+            mplew.writeInt(chr.getMarriageRing(false).getPartnerChrId());
         }
     }
 
     public static void addInventoryInfo(MaplePacketLittleEndianWriter mplew, MapleCharacter chr) {
-        // mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
-        mplew.writeMapleAsciiString(chr.getName());
-        mplew.writeInt(chr.getMeso()); // mesos
-        mplew.writeInt(chr.getId());
-        mplew.writeInt(chr.getBeans());
-        mplew.writeInt(0);
-        mplew.write(chr.getInventory(MapleInventoryType.EQUIP).getSlotLimit()); // equip slots
-        if (ServerConstants.调试输出封包) {
-            System.out.println("-------背包装备格子数据输出：" + chr.getInventory(MapleInventoryType.EQUIP).getSlotLimit());
-        }
-        mplew.write(chr.getInventory(MapleInventoryType.USE).getSlotLimit()); // use slots
-        if (ServerConstants.调试输出封包) {
-            System.out.println("-------背包消耗格子数据输出：" + chr.getInventory(MapleInventoryType.USE).getSlotLimit());
-        }
-        mplew.write(chr.getInventory(MapleInventoryType.SETUP).getSlotLimit()); // set-up slots
-        if (ServerConstants.调试输出封包) {
-            System.out.println("-------背包特殊格子数据输出：" + chr.getInventory(MapleInventoryType.SETUP).getSlotLimit());
-        }
-        mplew.write(chr.getInventory(MapleInventoryType.ETC).getSlotLimit()); // etc slots
-        if (ServerConstants.调试输出封包) {
-            System.out.println("-------背包其他格子数据输出：" + chr.getInventory(MapleInventoryType.ETC).getSlotLimit());
-        }
-        mplew.write(chr.getInventory(MapleInventoryType.CASH).getSlotLimit()); // cash slots
-        if (ServerConstants.调试输出封包) {
-            System.out.println("-------背包现金格子数据输出：" + chr.getInventory(MapleInventoryType.CASH).getSlotLimit());
-        }
-
-        //   mplew.write(unk1);
-        //  mplew.write(unk2); 
-        mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
         MapleInventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
         Collection<IItem> equippedC = iv.list();
         List<Item> equipped = new ArrayList<Item>(equippedC.size());
@@ -280,23 +250,13 @@ public class PacketHelper {
         mplew.writeShort(chr.getJob()); // job
         chr.getStat().connectData(mplew);
         mplew.writeShort(chr.getRemainingAp()); // remaining ap
-        /*
-         * if (GameConstants.isEvan(chr.getJob()) ||
-         * GameConstants.isResist(chr.getJob())) { final int size =
-         * chr.getRemainingSpSize(); mplew.write(size); for (int i = 0; i <
-         * chr.getRemainingSps().length; i++) { if (chr.getRemainingSp(i) > 0) {
-         * mplew.write(i + 1); mplew.write(chr.getRemainingSp(i)); } } } else {
-         */
         mplew.writeShort(chr.getRemainingSp()); // remaining sp
-        //  }
         mplew.writeInt(chr.getExp()); // exp
         mplew.writeShort(chr.getFame()); // fame
         mplew.writeInt(0); // Gachapon exp
         mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
         mplew.writeInt(chr.getMapId()); // current map id
         mplew.write(chr.getInitialSpawnpoint()); // spawnpoint
-//        mplew.writeShort(chr.getSubcategory()); //1 here = db
-        // mplew.writeZeroBytes(30);
     }
 
     public static void addCharLook(MaplePacketLittleEndianWriter mplew, MapleCharacter chr, boolean mega) {
@@ -609,16 +569,26 @@ public class PacketHelper {
     public static final void addCharacterInfo(final MaplePacketLittleEndianWriter mplew, final MapleCharacter chr) {
         mplew.writeLong(-1);
         mplew.write(0);
+        //
         addCharStats(mplew, chr);
         mplew.write(chr.getBuddylist().getCapacity());
         // Bless
-        //  if (chr.getBlessOfFairyOrigin() != null) {
-        //     mplew.write(1);
-        //     mplew.writeMapleAsciiString(chr.getBlessOfFairyOrigin());
-        //  } else {
-        mplew.write(1);
-        // }
-        // End
+        mplew.write(chr.getBlessOfFairyOrigin() != null ? 1 : 0);
+        if (chr.getBlessOfFairyOrigin() != null) {
+            mplew.writeMapleAsciiString(chr.getBlessOfFairyOrigin());
+        }
+        //
+        mplew.writeInt(chr.getMeso()); // mesos
+        mplew.writeInt(chr.getId());
+        mplew.writeInt(chr.getBeans());
+        mplew.writeInt(0);
+        //
+        for (byte i = 1; i <= 5; i++) {
+            mplew.write(chr.getInventory(MapleInventoryType.getByType(i)).getSlotLimit());
+        }
+        //
+        mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
+        //
         addInventoryInfo(mplew, chr);
         addSkillInfo(mplew, chr);
         addCoolDownInfo(mplew, chr);
@@ -628,7 +598,8 @@ public class PacketHelper {
         addRocksInfo(mplew, chr);
         addMonsterBookInfo(mplew, chr);
         chr.QuestInfoPacket(mplew); // for every questinfo: int16_t questid, string questdata
-        mplew.writeInt(0); // PQ rank
+        mplew.writeShort(0);
+        mplew.writeShort(0);
         mplew.writeShort(0);
     }
 
