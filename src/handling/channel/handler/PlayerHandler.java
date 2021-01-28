@@ -667,7 +667,7 @@ public class PlayerHandler {
         }
         final AttackInfo attack = DamageParse.Modify_AttackCrit(DamageParse.parseDmgM(slea, chr), chr, 1);
         final boolean mirror = chr.getBuffedValue(MapleBuffStat.MIRROR_IMAGE) != null;
-        Integer 夜行者隐身 = chr.getBuffedValue(MapleBuffStat.DARKSIGHT);
+        final boolean hasCygnusDarkSightState = chr.getBuffSource(MapleBuffStat.DARKSIGHT) == 14001003;
         double maxdamage = chr.getStat().getCurrentMaxBaseDamage();
         int attackCount = (chr.getJob() >= 430 && chr.getJob() <= 434 ? 2 : 1), skillLevel = 0;
         MapleStatEffect effect = null;
@@ -675,12 +675,11 @@ public class PlayerHandler {
         if ((attack.skill == 21100004) || (attack.skill == 21100005) || (attack.skill == 21110003) || (attack.skill == 21110004) || (attack.skill == 21120006) || (attack.skill == 21120007)) {
             chr.setCombo((byte) 1);
         }
-        if (夜行者隐身 != null) {
-            if (attack.skill != 14100005) {
-                chr.dropMessage("夜行者隐身状态除非使用驱逐技能。其他技能均无效！");
-                return;
-            }
+        if (hasCygnusDarkSightState && attack.skill != 14100005) {
+            chr.dropMessage("夜行者隐身状态除非使用驱逐技能。其他技能均无效！");
+            return;
         }
+
         if (attack.skill != 0) {
             skill = SkillFactory.getSkill(GameConstants.getLinkedAranSkill(attack.skill));
             skillLevel = chr.getSkillLevel(skill);
@@ -815,7 +814,7 @@ public class PlayerHandler {
             return;
         }
         final AttackInfo attack = DamageParse.Modify_AttackCrit(DamageParse.parseDmgR(slea, chr), chr, 2);
-        boolean hasCygnusDarkSightState = chr.getBuffSource(MapleBuffStat.DARKSIGHT) == 14001003;
+        final boolean hasCygnusDarkSightState = chr.getBuffSource(MapleBuffStat.DARKSIGHT) == 14001003;
         int bulletCount = 1, skillLevel = 0;
         MapleStatEffect effect = null;
         ISkill skill = null;
@@ -964,7 +963,7 @@ public class PlayerHandler {
             chr.getCheatTracker().registerOffense(CheatingOffense.人物死亡攻击);
             return;
         }
-        Integer 夜行者隐身 = chr.getBuffedValue(MapleBuffStat.DARKSIGHT);
+        final boolean hasCygnusDarkSightState = chr.getBuffSource(MapleBuffStat.DARKSIGHT) == 14001003;
         final AttackInfo attack = DamageParse.Modify_AttackCrit(DamageParse.parseDmgMa(slea, chr), chr, 3);
         final ISkill skill = SkillFactory.getSkill(GameConstants.getLinkedAranSkill(attack.skill));
         final int skillLevel = chr.getSkillLevel(skill);
@@ -972,12 +971,11 @@ public class PlayerHandler {
         if (effect == null) {
             return;
         }
-        if (夜行者隐身 != null) {
-            if (attack.skill != 14100005) {
-                chr.dropMessage("夜行者隐身状态除非使用驱逐技能。其他技能均无效！");
-                return;
-            }
+        if (hasCygnusDarkSightState && attack.skill != 14100005) {
+            chr.dropMessage("夜行者隐身状态除非使用驱逐技能。其他技能均无效！");
+            return;
         }
+
         if (effect.getCooldown() > 0 && !chr.isGM()) {
             if (chr.skillisCooling(attack.skill)) {
                 c.getSession().write(MaplePacketCreator.enableActions());
