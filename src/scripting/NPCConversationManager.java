@@ -300,6 +300,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 0xC;
     }
 
+    public void askAvatar(String text, int... args) {
+        askAvatar(text, 0, args);
+    }
+
     public void askAvatar(String text, int card, int... args) {
         if (lastMsg > -1) {
             return;
@@ -344,11 +348,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         lastMsg = 4;
     }
 
-    public void sendStyle(String text, int caid, int styles[]) {
+    public void sendStyle(String text, int styles[]) {
+        sendStyle(text, 0, styles);
+    }
+
+    public void sendStyle(String text, int card, int styles[]) {
         if (lastMsg > -1) {
             return;
         }
-        c.getSession().write(MaplePacketCreator.getNPCTalkStyle(npc, text, caid, styles));
+        c.getSession().write(MaplePacketCreator.getNPCTalkStyle(npc, text, card, styles));
         lastMsg = 7;
     }
 
