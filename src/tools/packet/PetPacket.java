@@ -98,7 +98,7 @@ public class PetPacket {
             mplew.writeShort(pet.getPos().x);
             mplew.writeShort(pet.getPos().y + 20);
             mplew.write(pet.getStance());
-            mplew.writeLong(pet.getFh());
+            mplew.writeShort(pet.getFh());
         }
         return mplew.getPacket();
     }
@@ -115,8 +115,7 @@ public class PetPacket {
         mplew.writeShort(pet.getPos().x);
         mplew.writeShort(pet.getPos().y);
         mplew.write(pet.getStance());
-        mplew.writeLong(pet.getFh());
-        //   mplew.writeShort(pet.getFh());
+        mplew.writeShort(pet.getFh());
     }
 
     public static final MaplePacket removePet(final int cid, final int index) {
@@ -162,8 +161,9 @@ public class PetPacket {
 
         return mplew.getPacket();
     }
+
     public static final MaplePacket commandResponse(final int cid, final int slot, final int animation, final boolean success) {//079
- // public static final MaplePacket commandResponse(final int cid, final byte command, final byte slot, final boolean success, final boolean food) {
+        // public static final MaplePacket commandResponse(final int cid, final byte command, final byte slot, final boolean success, final boolean food) {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         if (ServerConstants.调试输出封包) {
@@ -173,7 +173,7 @@ public class PetPacket {
         mplew.writeInt(cid);
         mplew.write(slot);
         mplew.write((animation == 1) && (success) ? 1 : 0);
-       // mplew.write(command == 1 ? 1 : 0);
+        // mplew.write(command == 1 ? 1 : 0);
         mplew.write(animation);
         if (animation == 1) {
             mplew.write(0);

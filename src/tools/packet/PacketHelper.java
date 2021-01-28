@@ -596,7 +596,6 @@ public class PacketHelper {
         } else {
             addExpirationTime(mplew, item.getExpiration() <= System.currentTimeMillis() ? -1 : item.getExpiration());
         }
-        //PacketHelper.addExpirationTime(mplew, -1); //always
         mplew.writeAsciiString(pet.getName(), 13);
         mplew.write(pet.getLevel());
         mplew.writeShort(pet.getCloseness());
@@ -609,8 +608,9 @@ public class PacketHelper {
         mplew.writeShort(0);
         mplew.writeShort(pet.getFlags());
         mplew.writeInt(pet.getPetItemId() == 5000054 && pet.getSecondsLeft() > 0 ? pet.getSecondsLeft() : 0); //in seconds, 3600 = 1 hr.
-        mplew.write(0);
-        mplew.write(active ? pet.getSummoned() ? pet.getSummonedValue() : 0 : 0);//显示装备栏上宠物的位置
+        mplew.writeShort(0);
+//        mplew.write(0);
+//        mplew.write(active ? pet.getSummoned() ? pet.getSummonedValue() : 0 : 0);//显示装备栏上宠物的位置
     }
 
     /**
