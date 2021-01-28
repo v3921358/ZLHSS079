@@ -364,40 +364,34 @@ public class GMCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             int total = 0;
-            int curConnected = c.getChannelServer().getConnectedClients();
-            c.getPlayer().dropMessage(6, "-------------------------------------------------------------------------------------");
-            c.getPlayer().dropMessage(6, new StringBuilder().append("頻道: ").append(c.getChannelServer().getChannel()).append(" 线上人数: ").append(curConnected).toString());
-            total += curConnected;
-            for (MapleCharacter chr : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                if (chr != null && c.getPlayer().getGMLevel() >= chr.getGMLevel()) {
-                    StringBuilder ret = new StringBuilder();
-                    ret.append(" 角色名称 ");
-                    ret.append(StringUtil.getRightPaddedStr(chr.getName(), ' ', 15));
-                    ret.append(" ID: ");
-                    ret.append(StringUtil.getRightPaddedStr(chr.getId() + "", ' ', 4));
-                    ret.append(" 等级: ");
-                    ret.append(StringUtil.getRightPaddedStr(String.valueOf(chr.getLevel()), ' ', 4));
-                    ret.append(" 职业: ");
-                    ret.append(chr.getJob());
-                    if (chr.getMap() != null) {
-                        ret.append(" 地图: ");
-                        ret.append(chr.getMapId());
-                        ret.append("(").append(chr.getMap().getMapName()).append(")");
-                        c.getPlayer().dropMessage(6, ret.toString());
+            for (ChannelServer cs : ChannelServer.getAllInstances()) {
+                int curConnected = cs.getConnectedClients();
+                c.getPlayer().dropMessage(6, "-------------------------------------------------------------------------------------");
+                c.getPlayer().dropMessage(6, new StringBuilder().append("頻道: ").append(cs.getChannel()).append(" 线上人数: ").append(curConnected).toString());
+                total += curConnected;
+                for (MapleCharacter chr : cs.getPlayerStorage().getAllCharacters()) {
+                    if (chr != null && c.getPlayer().getGMLevel() >= chr.getGMLevel()) {
+                        StringBuilder ret = new StringBuilder();
+                        ret.append(" 名称 ");
+                        ret.append(StringUtil.getRightPaddedStr(chr.getName(), ' ', 13));
+                        ret.append(" ID: ");
+                        ret.append(StringUtil.getRightPaddedStr(chr.getId() + "", ' ', 4));
+                        ret.append(" 等级: ");
+                        ret.append(StringUtil.getRightPaddedStr(String.valueOf(chr.getLevel()), ' ', 3));
+                        ret.append(StringUtil.getRightPaddedStr(String.valueOf(" 职业: "), ' ', 4));
+                        ret.append(chr.getJob());
+                        if (chr.getMap() != null) {
+                            ret.append(" 地图: ");
+                            ret.append(chr.getMapId());
+                            ret.append("(").append(chr.getMap().getMapName()).append(")");
+                            c.getPlayer().dropMessage(6, ret.toString());
+                        }
                     }
                 }
+                c.getPlayer().dropMessage(6, new StringBuilder().append("当前总计在线人数: ").append(total).toString());
+                c.getPlayer().dropMessage(6, "-------------------------------------------------------------------------------------");
             }
-            c.getPlayer().dropMessage(6, new StringBuilder().append("当前频道总计在线人数: ").append(total).toString());
-            c.getPlayer().dropMessage(6, "-------------------------------------------------------------------------------------");
-            int channelOnline = c.getChannelServer().getConnectedClients();
-            int totalOnline = 0;
-            /*
-             * 伺服器總人數
-             */
-            for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                totalOnline += cserv.getConnectedClients();
-            }
-            c.getPlayer().dropMessage(6, new StringBuilder().append("当前服务器总计在线人数: ").append(totalOnline).append("个").toString());
+            c.getPlayer().dropMessage(6, new StringBuilder().append("当前服务器总计在线人数: ").append(total).append("个").toString());
             c.getPlayer().dropMessage(6, "-------------------------------------------------------------------------------------");
             return 1;
         }
