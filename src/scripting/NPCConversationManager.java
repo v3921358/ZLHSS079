@@ -410,13 +410,18 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         getPlayer().equipChanged();
     }
 
-    public int setRandomAvatar(int ticket, int[] args_all) {
-        if (!haveItem(ticket)) {
-            return -1;
-        }
-        gainItem(ticket, (short) -1);
+    public int setRandomAvatar(int[] styleIds) {
+        return setRandomAvatar(0, styleIds);
+    }
 
-        int args = args_all[Randomizer.nextInt(args_all.length)];
+    public int setRandomAvatar(int ticket, int[] styleIds) {
+        if (ticket > 0) {
+            if (!haveItem(ticket)) {
+                return -1;
+            }
+            gainItem(ticket, (short) -1);
+        }
+        int args = styleIds[Randomizer.nextInt(styleIds.length)];
         if (args < 100) {
             c.getPlayer().setSkinColor((byte) args);
             c.getPlayer().updateSingleStat(MapleStat.SKIN, args);
