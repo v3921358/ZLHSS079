@@ -758,7 +758,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         if (!isAlive()) {
             return;
         }
-        
+
         if (from.hasGmLevel(5)) {
             from.dropMessage(6, "怪物: " + getId() + " 状态: " + status.getStati().name() + " 中毒: " + poison + " 持续时间: " + duration);
         }
@@ -830,7 +830,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
 
         if (stats.isBoss()) {
-            
+
             if (stat == MonsterStatus.眩晕 || stat == MonsterStatus.速度) {
                 return;
             }
@@ -856,87 +856,86 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             }
         };
 
-        if (poison && getHp() > 1) {
-            if (poison) {
-                int poisonLevel = from.getSkillLevel(status.getSkill());
-                int poisonDamage = Math.min(Short.MAX_VALUE, (int) (getMobMaxHp() / (70.0 - poisonLevel) + 0.999));
-                status.setValue(MonsterStatus.中毒, Integer.valueOf(poisonDamage));
-                status.setPoisonSchedule(timerManager.register(new PoisonTask(poisonDamage, from, status, cancelTask, false), 1000, 1000));
-                // final int poisonDamage = (int) Math.min(Short.MAX_VALUE, (long) (getMobMaxHp() / (70.0 - from.getSkillLevel(status.getSkill())) + 0.999));
-                // status.setValue(MonsterStatus.中毒, poisonDamage);
-                // status.setPoisonSchedule(timerManager.register(new PoisonTask(poisonDamage, from, status, cancelTask, false), 1000, 1000));
-            } else if (venom) {
-                int poisonLevel = 0;
-                int matk = 0;
+        if (poison) {
+            int poisonLevel = from.getSkillLevel(status.getSkill());
+            int poisonDamage = Math.min(Short.MAX_VALUE, (int) (getMobMaxHp() / (70.0 - poisonLevel) + 0.999));
+            status.setValue(MonsterStatus.中毒, Integer.valueOf(poisonDamage));
+            status.setPoisonSchedule(timerManager.register(new PoisonTask(poisonDamage, from, status, cancelTask, false), 1000, 1000));
+            // final int poisonDamage = (int) Math.min(Short.MAX_VALUE, (long) (getMobMaxHp() / (70.0 - from.getSkillLevel(status.getSkill())) + 0.999));
+            // status.setValue(MonsterStatus.中毒, poisonDamage);
+            // status.setPoisonSchedule(timerManager.register(new PoisonTask(poisonDamage, from, status, cancelTask, false), 1000, 1000));
+        } else if (venom) {
+            int poisonLevel = 0;
+            int matk = 0;
 
-                switch (from.getJob()) {
-                    case 412:
-                        poisonLevel = from.getSkillLevel(SkillFactory.getSkill(4120005));
-                        if (poisonLevel <= 0) {
-                            return;
-                        }
-                        matk = SkillFactory.getSkill(4120005).getEffect(poisonLevel).getMatk();
-                        break;
-                    case 422:
-                        poisonLevel = from.getSkillLevel(SkillFactory.getSkill(4220005));
-                        if (poisonLevel <= 0) {
-                            return;
-                        }
-                        matk = SkillFactory.getSkill(4220005).getEffect(poisonLevel).getMatk();
-                        break;
-                    case 1411:
-                    case 1412:
-                        poisonLevel = from.getSkillLevel(SkillFactory.getSkill(14110004));
-                        if (poisonLevel <= 0) {
-                            return;
-                        }
-                        matk = SkillFactory.getSkill(14110004).getEffect(poisonLevel).getMatk();
-                        break;
-                    case 434:
-                        poisonLevel = from.getSkillLevel(SkillFactory.getSkill(4340001));
-                        if (poisonLevel <= 0) {
-                            return;
-                        }
-                        matk = SkillFactory.getSkill(4340001).getEffect(poisonLevel).getMatk();
-                        break;
-                    default:
-                        return; // Hack, using venom without the job required
+            switch (from.getJob()) {
+                case 412:
+                    poisonLevel = from.getSkillLevel(SkillFactory.getSkill(4120005));
+                    if (poisonLevel <= 0) {
+                        return;
+                    }
+                    matk = SkillFactory.getSkill(4120005).getEffect(poisonLevel).getMatk();
+                    break;
+                case 422:
+                    poisonLevel = from.getSkillLevel(SkillFactory.getSkill(4220005));
+                    if (poisonLevel <= 0) {
+                        return;
+                    }
+                    matk = SkillFactory.getSkill(4220005).getEffect(poisonLevel).getMatk();
+                    break;
+                case 1411:
+                case 1412:
+                    poisonLevel = from.getSkillLevel(SkillFactory.getSkill(14110004));
+                    if (poisonLevel <= 0) {
+                        return;
+                    }
+                    matk = SkillFactory.getSkill(14110004).getEffect(poisonLevel).getMatk();
+                    break;
+                case 434:
+                    poisonLevel = from.getSkillLevel(SkillFactory.getSkill(4340001));
+                    if (poisonLevel <= 0) {
+                        return;
+                    }
+                    matk = SkillFactory.getSkill(4340001).getEffect(poisonLevel).getMatk();
+                    break;
+                default:
+                    return; // Hack, using venom without the job required
                 }
-                final int luk = from.getStat().getLuk();
-                final int maxDmg = (int) Math.ceil(Math.min(Short.MAX_VALUE, 0.2 * luk * matk));
-                final int minDmg = (int) Math.ceil(Math.min(Short.MAX_VALUE, 0.1 * luk * matk));
-                int gap = maxDmg - minDmg;
-                if (gap == 0) {
-                    gap = 1;
-                }
-                int poisonDamage = 0;
-                for (int i = 0; i < getVenomMulti(); i++) {
-                    poisonDamage = poisonDamage + (Randomizer.nextInt(gap) + minDmg);
-                }
-                poisonDamage = Math.min(Short.MAX_VALUE, poisonDamage);
-                status.setValue(MonsterStatus.中毒, poisonDamage);
-                status.setPoisonSchedule(timerManager.register(new PoisonTask(poisonDamage, from, status, cancelTask, false), 1000, 1000));
-
-            } else if (statusSkill == 4111003 || statusSkill == 14111001) { // shadow web
-                status.setPoisonSchedule(timerManager.schedule(new PoisonTask((int) (getMobMaxHp() / 50.0 + 0.999), from, status, cancelTask, true), 3500));
-
-            } else if (statusSkill == 4121004 || statusSkill == 4221004) {
-                final int damage = (from.getStat().getStr() + from.getStat().getLuk()) * 2 * (60 / 100);
-                status.setPoisonSchedule(timerManager.register(new PoisonTask(damage, from, status, cancelTask, false), 1000, 1000));
+            final int luk = from.getStat().getLuk();
+            final int maxDmg = (int) Math.ceil(Math.min(Short.MAX_VALUE, 0.2 * luk * matk));
+            final int minDmg = (int) Math.ceil(Math.min(Short.MAX_VALUE, 0.1 * luk * matk));
+            int gap = maxDmg - minDmg;
+            if (gap == 0) {
+                gap = 1;
             }
+            int poisonDamage = 0;
+            for (int i = 0; i < getVenomMulti(); i++) {
+                poisonDamage = poisonDamage + (Randomizer.nextInt(gap) + minDmg);
+            }
+            poisonDamage = Math.min(Short.MAX_VALUE, poisonDamage);
+            status.setValue(MonsterStatus.中毒, poisonDamage);
+            status.setPoisonSchedule(timerManager.register(new PoisonTask(poisonDamage, from, status, cancelTask, false), 1000, 1000));
 
-            stati.put(stat, status);
-            map.broadcastMessage(MobPacket.applyMonsterStatus(getObjectId(), status), getPosition());
-            if (getController() != null && !getController().isMapObjectVisible(this)) {
-                getController().getClient().getSession().write(MobPacket.applyMonsterStatus(getObjectId(), status));
-            }
-            int aniTime = 0;
-            if (skilz != null) {
-                aniTime = skilz.getAnimationTime();
-            }
-            ScheduledFuture<?> schedule = timerManager.schedule(cancelTask, duration + aniTime);
-            status.setCancelTask(schedule);
+        } else if (statusSkill == 4111003 || statusSkill == 14111001) { // shadow web
+            status.setPoisonSchedule(timerManager.schedule(new PoisonTask((int) (getMobMaxHp() / 50.0 + 0.999), from, status, cancelTask, true), 3500));
+
+        } else if (statusSkill == 4121004 || statusSkill == 4221004) {
+            final int damage = (from.getStat().getStr() + from.getStat().getLuk()) * 2 * (60 / 100);
+            status.setPoisonSchedule(timerManager.register(new PoisonTask(damage, from, status, cancelTask, false), 1000, 1000));
         }
+
+        stati.put(stat, status);
+        map.broadcastMessage(MobPacket.applyMonsterStatus(getObjectId(), status), getPosition());
+        if (getController() != null && !getController().isMapObjectVisible(this)) {
+            getController().getClient().getSession().write(MobPacket.applyMonsterStatus(getObjectId(), status));
+        }
+        int aniTime = 0;
+        if (skilz != null) {
+            aniTime = skilz.getAnimationTime();
+        }
+        ScheduledFuture<?> schedule = timerManager.schedule(cancelTask, duration + aniTime);
+        status.setCancelTask(schedule);
+
     }
 
     /*
