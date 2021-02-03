@@ -145,13 +145,20 @@ public class PetHandler {
             return;
         }
         int slot = 0;
+        MaplePet targetPet = null;
         List<MaplePet> pets = c.getPlayer().getPets();
         for (MaplePet pet : pets) {
-            if (pet.getFullness() < 100) {
-                slot = c.getPlayer().getPetSlot(pet);
+            if (pet.getSummoned() && pet.getFullness() < 100) {
+                targetPet = pet;
             }
         }
-        MaplePet pet = c.getPlayer().getPet(slot);
+        if (targetPet == null) {
+            for (MaplePet pet : pets) {
+                if (pet.getSummoned()) {
+                    targetPet = pet;
+                }
+            }
+        }
         slea.readInt();
         short itemPos = slea.readShort();
         final int itemId = slea.readInt();
@@ -162,7 +169,7 @@ public class PetHandler {
             c.sendPacket(MaplePacketCreator.enableActions());
             return;
         }
-        if (pet == null) {
+        if (targetPet == null) {
             c.sendPacket(MaplePacketCreator.enableActions());
             return;
         }
@@ -171,35 +178,35 @@ public class PetHandler {
         if (Randomizer.nextInt(101) > 50) {
             gainCloseness = true;
         }
-        if (pet.getFullness() < 100) {
-            int newFullness = pet.getFullness() + 30;
+        if (targetPet.getFullness() < 100) {
+            int newFullness = targetPet.getFullness() + 30;
             if (newFullness > 100) {
                 newFullness = 100;
             }
-            pet.setFullness(newFullness);
-            if ((gainCloseness) && (pet.getCloseness() < 30000)) {
-                int newCloseness = pet.getCloseness() + 1;
+            targetPet.setFullness(newFullness);
+            if ((gainCloseness) && (targetPet.getCloseness() < 30000)) {
+                int newCloseness = targetPet.getCloseness() + 1;
                 if (newCloseness > 30000) {
                     newCloseness = 30000;
                 }
-                pet.setCloseness(newCloseness);
-                if (newCloseness >= ExpTable.getClosenessNeededForLevel(pet.getLevel() + 1)) {
-                    pet.setLevel(pet.getLevel() + 1);
+                targetPet.setCloseness(newCloseness);
+                if (newCloseness >= ExpTable.getClosenessNeededForLevel(targetPet.getLevel() + 1)) {
+                    targetPet.setLevel(targetPet.getLevel() + 1);
                 }
 
             }
 
-            c.getSession().write(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getInventoryPosition()), true));
+            c.getSession().write(PetPacket.updatePet(targetPet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) targetPet.getInventoryPosition()), true));
             c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), slot, 1, true), true);
         } else {
             if (gainCloseness) {
-                int newCloseness = pet.getCloseness() - 1;
+                int newCloseness = targetPet.getCloseness() - 1;
                 if (newCloseness < 0) {
                     newCloseness = 0;
                 }
-                pet.setCloseness(newCloseness);
-                if (newCloseness < ExpTable.getClosenessNeededForLevel(pet.getLevel())) {
-                    pet.setLevel(pet.getLevel() - 1);
+                targetPet.setCloseness(newCloseness);
+                if (newCloseness < ExpTable.getClosenessNeededForLevel(targetPet.getLevel())) {
+                    targetPet.setLevel(targetPet.getLevel() - 1);
                 }
             }
 
