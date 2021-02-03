@@ -1676,17 +1676,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     public int fishingMap = 741000201; //地图
 
     public void startFishingTask(final boolean VIP) {
-        if (fishTasking < 9 && getClient().getPlayer().getMapId() == getClient().getPlayer().fishingMap) {
-            fishTasking++;
-            String gage = "";
-            for (int i = 0; i <= fishTasking; i++) {
-                gage += "●";
-            }
-            for (int i = 9; i > fishTasking; i--) {
-                gage += "○";
-            }
-            getClient().getSession().write(MaplePacketCreator.sendHint("开始钓鱼...\r\n" + gage, 200, 200));
-        }
         final int time = GameConstants.getFishingTime(VIP, isGM());
         cancelFishingTask();
 
@@ -1710,35 +1699,15 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                         final int money = Randomizer.rand(expMulti ? 15 : 10, expMulti ? 75000 : 50000);
                         gainMeso(money, true);
                         client.getSession().write(UIPacket.fishingUpdate((byte) 1, money));
-                        if (getItemQuantity(5340001, true) == 1) {
-                            dropMessage(5, "使用高级鱼竿钓鱼。\r\n获得金币：" + money);
-                            getClient().getSession().write(MaplePacketCreator.sendHint("使用高级鱼竿钓鱼。\r\n获得金币：" + money, 200, 200));
-                        } else if (getItemQuantity(5340000, true) == 1) {
-                            dropMessage(5, "使用普通鱼竿钓鱼。\r\n获得金币：" + money);
-                            getClient().getSession().write(MaplePacketCreator.sendHint("使用普通鱼竿钓鱼。\r\n获得金币：" + money, 200, 200));
-                        }
                         break;
                     case 1: // EXP
                         final int experi = Randomizer.nextInt(Math.abs(GameConstants.getExpNeededForLevel(level) / 600) + 1);
                         gainExp(expMulti ? (experi * 3 / 2) : experi, true, false, true);
                         client.getSession().write(UIPacket.fishingUpdate((byte) 2, experi));
-                        if (getItemQuantity(5340001, true) == 1) {
-                            dropMessage(5, "使用高级鱼竿钓鱼。\r\n获得经验：" + experi);
-                            getClient().getSession().write(MaplePacketCreator.sendHint("使用高级鱼竿钓鱼。\r\n获得经验：" + experi, 200, 200));
-                        } else if (getItemQuantity(5340000, true) == 1) {
-                            dropMessage(5, "使用普通鱼竿钓鱼。\r\n获得经验：" + experi);
-                            getClient().getSession().write(MaplePacketCreator.sendHint("使用普通鱼竿钓鱼。\r\n获得经验：" + experi, 200, 200));
-                        }
                         break;
                     default:
-                        if (getItemQuantity(5340001, true) == 1) {
-                            dropMessage(5, "使用高级鱼竿钓鱼。\r\n获得经验：" + randval);
-                            getClient().getSession().write(MaplePacketCreator.sendHint("使用高级鱼竿钓鱼。\r\n获得经验：" + randval, 200, 200));
-                        } else if (getItemQuantity(5340000, true) == 1) {
-                            dropMessage(5, "使用普通鱼竿钓鱼。\r\n获得经验：" + randval);
-                            getClient().getSession().write(MaplePacketCreator.sendHint("使用普通鱼竿钓鱼。\r\n获得经验：" + randval, 200, 200));
-                        }
                         MapleInventoryManipulator.addById(client, randval, (short) 1, (byte) 0);
+                        client.getSession().write(MaplePacketCreator.getShowItemGain(randval, (short) 1, true));
                         client.getSession().write(UIPacket.fishingUpdate((byte) 0, randval));
                         break;
                 }
@@ -1756,7 +1725,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     public void cancelFishingTask() {
         if (fishing != null) {
             fishing.cancel(false);
-            getClient().getSession().write(MaplePacketCreator.sendHint("钓鱼中断。", 200, 200));
+//            getClient().getSession().write(MaplePacketCreator.sendHint("钓鱼中断。", 200, 200));
         }
     }
 

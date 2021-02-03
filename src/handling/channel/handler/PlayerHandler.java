@@ -149,21 +149,8 @@ public class PlayerHandler {
             chr.getCheatTracker().registerOffense(CheatingOffense.使用不存在道具, Integer.toString(itemId));
             return;
         }
-        if (itemId == 3011000) {
-            boolean haz = false;
-            for (IItem item : c.getPlayer().getInventory(MapleInventoryType.CASH).list()) {
-                if (item.getItemId() == 5340000) {
-                    haz = true;
-                    chr.startFishingTask(true);
-                } else if (item.getItemId() == 5340001) {
-                    haz = false;
-                    chr.startFishingTask(true);
-                    break;
-                }
-            }
-            if (haz) {
-                chr.startFishingTask(false);
-            }
+        if (itemId == 3011000 && chr.getMapId() >= 741000200 && chr.getMapId() <= 741000208) {
+            chr.startFishingTask(c.getPlayer().getInventory(MapleInventoryType.CASH).findById(5340001) != null);
         }
         chr.setChair(itemId);
         chr.getMap().broadcastMessage(chr, MaplePacketCreator.showChair(chr.getId(), itemId), false);

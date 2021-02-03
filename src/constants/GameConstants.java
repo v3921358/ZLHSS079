@@ -1004,8 +1004,10 @@ public class GameConstants {
         1012141, 10
     };
     public static int[] fishingReward = {
-        0, 90, // Meso
-        1, 70, // EXP
+        0, // Meso
+        0, // Meso
+        0, // Meso
+        1, // EXP
         // 1302021, 5, // Pico Pico Hammer
         // 1072238, 1, // Voilet Snowshoe
         // 1072239, 1, // Yellow Snowshoe
@@ -1016,28 +1018,28 @@ public class GameConstants {
         // 1442011, 1, // Surfboard
         //  4000517, 8, // Golden Fish
         //  4000518, 25, // Golden Fish Egg
-        4031627, 2, // White Bait (3cm)
-        4031628, 1, // Sailfish (120cm)
-        4031630, 1, // Carp (30cm)
-        4031631, 1, // Salmon(150cm)
-        4031632, 1, // Shovel
-        4031633, 2, // Whitebait (3.6cm)
-        4031634, 1, // Whitebait (5cm)
-        4031635, 1, // Whitebait (6.5cm)
-        4031636, 1, // Whitebait (10cm)
-        4031637, 2, // Carp (53cm)
-        4031638, 2, // Carp (60cm)
-        4031639, 1, // Carp (100cm)
-        4031640, 1, // Carp (113cm)
-        4031641, 2, // Sailfish (128cm)
-        4031642, 2, // Sailfish (131cm)
-        4031643, 1, // Sailfish (140cm)
-        4031644, 1, // Sailfish (148cm)
-        4031645, 2, // Salmon (166cm)
-        4031646, 2, // Salmon (183cm)
-        4031647, 1, // Salmon (227cm)
-        4031648, 1, // Salmon (288cm)
-        4031629, 1 // Pot
+        4031627, // White Bait (3cm)
+        4031628, // Sailfish (120cm)
+        4031630, // Carp (30cm)
+        4031631, // Salmon(150cm)
+        4031632, // Shovel
+        4031633, // Whitebait (3.6cm)
+        4031634, // Whitebait (5cm)
+        4031635, // Whitebait (6.5cm)
+        4031636, // Whitebait (10cm)
+        4031637, // Carp (53cm)
+        4031638, // Carp (60cm)
+        4031639, // Carp (100cm)
+        4031640, // Carp (113cm)
+        4031641, // Sailfish (128cm)
+        4031642, // Sailfish (131cm)
+        4031643, // Sailfish (140cm)
+        4031644, // Sailfish (148cm)
+        4031645, // Salmon (166cm)
+        4031646, // Salmon (183cm)
+        4031647, // Salmon (227cm)
+        4031648, // Salmon (288cm)
+        4031629,// Pot
     };
 
     public static boolean isDragonItem(int itemId) {
