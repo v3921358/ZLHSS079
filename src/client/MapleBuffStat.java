@@ -39,12 +39,12 @@ public enum MapleBuffStat implements Serializable {
     BLUE_AURA(0x10000, true),
     YELLOW_AURA(0x20000, true),
     //ENERGY_CHARGE(0x80000000000L, true),
-    ENERGY_CHARGE(0x2000000000L, true),
-    疾驰移动(0x8000000000L),
-    疾驰跳跃(0x10000000000L),
-    骑兽技能(0x10000000000L, true),
-    极速领域(0x40000000000L, true),
-    HOMING_BEACON(0x80000000000L, true),
+    ENERGY_CHARGE(0x200000000000L, true),
+    疾驰移动(0x400000000000L, true), // done
+    疾驰跳跃(0x800000000000L, true), // done
+    骑兽技能(0x1000000000000L, true),
+    极速领域(0x2000000000000L, true),
+    HOMING_BEACON(0x400000000L, true),
     ELEMENT_RESET(0x200000000000000L, true),
     ARAN_COMBO(0x1000000000000000L, true),
     COMBO_DRAIN(0x2000000000000000L, true),
@@ -136,7 +136,7 @@ public enum MapleBuffStat implements Serializable {
 
     能量(0x2000000000L, true),
     能量获取(0x2000000000L, true),
-   // 骑宠技能(1099511627776L),
+    // 骑宠技能(1099511627776L),
     MESOGUARD(0x1000000000000000L),
     /**
      * ***<战神技能mask>****

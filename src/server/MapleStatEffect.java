@@ -1179,13 +1179,12 @@ public class MapleStatEffect implements Serializable {
         List<Pair<MapleBuffStat, Integer>> localstatups = statups;
         boolean normal = true;
         switch (sourceid) {
-            //  case 5001005: // Dash
-            // case 5121009: // Speed Infusion
+            case 5001005: // Dash
+            case 5121009: // Speed Infusion
             case 15111005:
-
             case 15001003: {
                 applyto.getClient().getSession().write(MaplePacketCreator.givePirate(statups, localDuration / 1000, sourceid));
-                // applyto.getMap().broadcastMessage(applyto, MaplePacketCreator.giveForeignPirate(statups, localDuration / 1000, applyto.getId(), sourceid), false);
+                applyto.getMap().broadcastMessage(applyto, MaplePacketCreator.giveForeignPirate(statups, localDuration / 1000, applyto.getId(), sourceid), false);
                 normal = false;
                 break;
             }

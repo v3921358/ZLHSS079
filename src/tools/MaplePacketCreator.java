@@ -2183,32 +2183,20 @@ public class MaplePacketCreator {
             System.out.println("giveMount--------------------");
         }
         mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
-
-        mplew.write(0);
+        //
         writeLongMask(mplew, statups);
-
-        //mplew.writeShort(0);
-        //  mplew.writeInt(buffid); // 1902000 saddle
-        //  mplew.writeInt(skillid); // skillid
-        for (Pair statup : statups) {
-            if ((((Integer) statup.getRight()).shortValue() >= 1000) && (((Integer) statup.getRight()).shortValue() != 1002)) {
-                mplew.writeShort(((Integer) statup.getRight()).shortValue() + c.getGender() * 100);
-            } else {
-                mplew.write(0);
-            }
-            mplew.writeInt(buffid);
-            mplew.writeInt(skillid);
-            //log.info("第一段的MASK："+mask+" ");
-        }
+        //
+        mplew.write(0);
+        mplew.write(0);
+        //
+        mplew.writeInt(buffid);
+        mplew.writeInt(skillid);
         mplew.writeInt(0); // Server tick value
+        //
         mplew.writeShort(0);
         mplew.write(0);
-        mplew.write(2); // Total buffed times
-        int a = giveBuff(c, buffid);
-        if (a > 0) {
-            mplew.write(a);
-            // //////System.out.println("giveBuff在之后发了一个字节的a包 a的值："+a);
-        }
+        mplew.write(2);
+        //
         return mplew.getPacket();
     }
 
@@ -2287,25 +2275,27 @@ public class MaplePacketCreator {
             System.out.println("givePirate--------------------");
         }
         mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
-        /*
-         * writeLongMask(mplew, statups); mplew.writeShort(0); for
-         * (Pair<MapleBuffStat, Integer> stat : statups) {
-         * mplew.writeInt(stat.getRight().intValue()); mplew.writeLong(skillid);
-         * mplew.writeZeroBytes(infusion ? 6 : 1); mplew.writeShort(duration); }
-         * mplew.writeShort(infusion ? 600 : 0); if (!infusion) {
-         * mplew.write(1); //does this only come in dash? }
-         */
 
-        //LongMask
-        mplew.writeLong(0L);
-        mplew.writeLong(MapleBuffStat.MORPH.getValue());
-        mplew.writeShort(0);
-
-        mplew.writeInt(skillid);
-        mplew.writeZeroBytes(1);
-        mplew.writeInt(duration);
-        mplew.writeZeroBytes(6);
-        mplew.writeShort(0);
+        //
+        writeLongMask(mplew, statups);
+        //
+        mplew.write(0);
+        mplew.write(0);
+        //
+        for (Pair<MapleBuffStat, Integer> stat : statups) {
+            mplew.writeInt(stat.getRight());
+            mplew.writeInt(skillid);
+            mplew.write(0);
+            mplew.writeInt(0);
+            if (infusion) {
+                mplew.write(0);
+                mplew.writeInt(0);
+            }
+            mplew.writeShort(duration);
+        }
+        //
+        mplew.writeShort(infusion ? 600 : 0);
+        mplew.write(0);
         return mplew.getPacket();
     }
 
@@ -2319,14 +2309,21 @@ public class MaplePacketCreator {
         mplew.writeShort(SendPacketOpcode.GIVE_FOREIGN_BUFF.getValue());
         mplew.writeInt(cid);
         writeLongMask(mplew, statups);
-        mplew.writeShort(0);
+        mplew.write(0);
+        mplew.write(0);
         for (Pair<MapleBuffStat, Integer> stat : statups) {
-            mplew.writeInt(stat.getRight().intValue());
-            mplew.writeLong(skillid);
-            mplew.writeZeroBytes(infusion ? 7 : 1);
+            mplew.writeInt(stat.getRight());
+            mplew.writeInt(skillid);
+            mplew.write(0);
+            mplew.writeInt(0);
+            if (infusion) {
+                mplew.write(0);
+                mplew.writeInt(0);
+            }
             mplew.writeShort(duration);//duration... seconds
         }
         mplew.writeShort(infusion ? 600 : 0);
+        mplew.write(0);
         return mplew.getPacket();
     }
 
@@ -2395,15 +2392,14 @@ public class MaplePacketCreator {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
         // long mask = getLongMask(statups);
         mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
+        writeLongMask(mplew, statups);
         mplew.write(0);
-        mplew.writeLong(MapleBuffStat.ENERGY_CHARGE.getValue());
-        mplew.writeLong(0L);
         mplew.write(0);
         for (Pair stat : statups) {
             mplew.writeInt(((Integer) stat.getRight()).shortValue());
             mplew.writeInt(0);
-            mplew.writeInt(0);
             mplew.write(0);
+            mplew.writeInt(0);
             mplew.writeShort(duration);
         }
         mplew.writeShort(0);
@@ -2571,16 +2567,15 @@ public class MaplePacketCreator {
         mplew.writeShort(SendPacketOpcode.GIVE_FOREIGN_BUFF.getValue());
         mplew.writeInt(cid);
 
-        mplew.write(0);
         writeLongMask(mplew, statups);
-
+        mplew.write(0);
         mplew.write(0);
         mplew.writeInt(itemId);
         mplew.writeInt(skillId);
         mplew.writeInt(0);
         mplew.writeShort(0);
         mplew.write(0);
-
+        mplew.write(2);
         return mplew.getPacket();
     }
 

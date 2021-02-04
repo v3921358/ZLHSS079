@@ -2134,7 +2134,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
                         //System.out.println("获取能量E："+ energyLevel);
 
                         List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<MapleBuffStat, Integer>(MapleBuffStat.ENERGY_CHARGE, energyLevel));
-                        client.getSession().write(MaplePacketCreator.能量条(stat, energyLevel / 1000)); //????????????????
+                        client.getSession().write(MaplePacketCreator.能量条(stat, Integer.MAX_VALUE / 1000)); //????????????????
                         //client.getSession().write(MaplePacketCreator.givePirateBuff(energyLevel, 0, stat));
                         // client.getSession().write(MaplePacketCreator.giveEnergyChargeTest(energyLevel, echeff.getDuration() / 1000));
                         setBuffedValue(MapleBuffStat.ENERGY_CHARGE, Integer.valueOf(energyLevel));
