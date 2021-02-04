@@ -2026,6 +2026,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     public void cancelAllBuffs_() {
+        cancelAllBuffs();
         effects.clear();
     }
 
@@ -2948,7 +2949,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             final int channel = client.getChannel();
             for (MaplePartyCharacter partychar : party.getMembers()) {
                 if (partychar.getMapid() == getMapId() && partychar.getChannel() == channel) {
-                    MapleCharacter other = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterByName(partychar.getName());
+                    MapleCharacter other = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(partychar.getId());
                     if (other != null) {
                         other.getClient().getSession().write(MaplePacketCreator.updatePartyMemberHP(getId(), stats.getHp(), stats.getCurrentMaxHp()));
                     }
@@ -2964,7 +2965,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
         int channel = client.getChannel();
         for (MaplePartyCharacter partychar : party.getMembers()) {
             if (partychar.getMapid() == getMapId() && partychar.getChannel() == channel) {
-                MapleCharacter other = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterByName(partychar.getName());
+                MapleCharacter other = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(partychar.getId());
                 if (other != null) {
                     client.getSession().write(MaplePacketCreator.updatePartyMemberHP(other.getId(), other.getStat().getHp(), other.getStat().getCurrentMaxHp()));
                 }
@@ -3986,6 +3987,11 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     public void sendSpawnData(MapleClient client) {
         if (client.getPlayer().allowedToTarget(this)) {
             client.getSession().write(MaplePacketCreator.spawnPlayerMapobject(this));
+
+            if (client.getPlayer().getParty() != null) {
+                client.getPlayer().receivePartyMemberHP();
+                client.getPlayer().updatePartyMemberHP();
+            }
 
             for (final MaplePet pet : pets) {
                 if (pet.getSummoned()) {
