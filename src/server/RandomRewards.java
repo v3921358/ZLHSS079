@@ -37,39 +37,39 @@ public class RandomRewards {
         compiledGold = returnArray;
 
         // Silver Box
-        returnArray = new ArrayList<Integer>();
+        returnArray.clear();
 
         processRewards(returnArray, GameConstants.silverrewards);
 
         compiledSilver = returnArray;
 
         // Fishing Rewards
-        returnArray = new ArrayList<Integer>();
+        returnArray.clear();
 
-        processRewards(returnArray, GameConstants.fishingReward);
-
-        compiledFishing = returnArray;
+        for (int i : GameConstants.fishingReward) {
+            compiledFishing.add(i);
+        }
 
         // Event Rewards
-        returnArray = new ArrayList<Integer>();
+        returnArray.clear();
 
         processRewards(returnArray, GameConstants.eventCommonReward);
 
         compiledEventC = returnArray;
 
-        returnArray = new ArrayList<Integer>();
+        returnArray.clear();
 
         processRewards(returnArray, GameConstants.eventUncommonReward);
 
         compiledEventB = returnArray;
 
-        returnArray = new ArrayList<Integer>();
+        returnArray.clear();
 
         processRewards(returnArray, GameConstants.eventRareReward);
 
         compiledEventA = returnArray;
 
-        returnArray = new ArrayList<Integer>();
+        returnArray.clear();
 
         processRewards(returnArray, GameConstants.eventSuperReward);
 
