@@ -1,5 +1,5 @@
 @echo off
 @title ZlhssMS_079
-set CLASSPATH=.;dist\
-java -server -Dnet.sf.odinms.wzpath=wz server.Start
+set CLASSPATH=.;dist\*
+java -server -Xmx1024M -Dnet.sf.odinms.wzpath=wz server.Start
 pause
