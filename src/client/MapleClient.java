@@ -881,7 +881,7 @@ public class MapleClient implements Serializable {
     }
 
     public final void disconnect(final boolean RemoveInChannelServer, final boolean fromCS, final boolean shutdown) {
-        if (player != null && isLoggedIn()) {
+        if (player != null) {
             if (player.getMaster() > 0) {
                 player.getMster().dropMessage(5, "由于你的徒弟断开，你的学徒已复位.");
                 player.getMster().setApprentice(0);
@@ -991,7 +991,7 @@ public class MapleClient implements Serializable {
                     FileoutputUtil.outputFileError(FileoutputUtil.Acc_Stuck, e);
                     System.err.println(getLogMessage(this, "ERROR") + e);
                 } finally {
-                    if (RemoveInChannelServer && ch > 0) {
+                    if (RemoveInChannelServer) {
                         CashShopServer.getPlayerStorage().deregisterPlayer(idz, namez);
                     }
                     player = null;
