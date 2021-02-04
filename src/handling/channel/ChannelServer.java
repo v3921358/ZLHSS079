@@ -167,9 +167,9 @@ public class ChannelServer implements Serializable {
         players = new PlayerStorage(channel);
         loadEvents();
         Timer tMan = Timer.TimerManager.getInstance();
-        if (this.channel == 1) {
-            tMan.register(AutoCherryMSEventManager.getInstance(this, getMapFactory()), 120000L);
-        }
+//        if (this.channel == 1) {
+//            tMan.register(AutoCherryMSEventManager.getInstance(this, getMapFactory()), 120000L);
+//        }
         try {
             acceptor.setHandler(new MapleServerHandler(channel, false));
             acceptor.bind(new InetSocketAddress(port));
