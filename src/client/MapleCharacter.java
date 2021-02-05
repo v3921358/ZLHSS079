@@ -5568,7 +5568,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
 
     public void spawnPet(byte slot, boolean lead, boolean broadcast) {
         final IItem item = getInventory(MapleInventoryType.CASH).getItem(slot);
-        if (item == null || item.getItemId() > 5001000 || item.getItemId() < 5000000) {
+        if (item == null || !GameConstants.isPet(item.getItemId())) {
             return;
         }
         switch (item.getItemId()) {
