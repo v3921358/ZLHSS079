@@ -1579,7 +1579,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public String checkMapDrop() {
         List ranks = new ArrayList(MapleMonsterInformationProvider.getInstance().getGlobalDrop());
         int mapid = this.c.getPlayer().getMap().getId();
-        int cashServerRate = getClient().getChannelServer().getCashRate();
         int globalServerRate = 1;
         if ((ranks != null) && (ranks.size() > 0)) {
             int num = 0;
@@ -1594,10 +1593,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                         name.append("\r\n--------------------------------------\r\n");
                     }
                     String names = new StringBuilder().append("#z").append(itemId).append("#").toString();
-                    if ((itemId == 0) && (cashServerRate != 0)) {
-                        itemId = 4031041;
-                        names = new StringBuilder().append(de.Minimum * cashServerRate).append(" - ").append(de.Maximum * cashServerRate).append(" 的抵用卷").toString();
-                    }
                     int chance = de.chance * globalServerRate;
                     if (getPlayer().isAdmin()) {
                         name.append(num + 1).append(") #v").append(itemId).append("#").append(names).append(" - ").append(Integer.valueOf(chance >= 999999 ? 1000000 : chance).doubleValue() / 10000.0D).append("%的爆率. ").append((de.questid > 0) && (MapleQuest.getInstance(de.questid).getName().length() > 0) ? new StringBuilder().append("需要接受任务: ").append(MapleQuest.getInstance(de.questid).getName()).toString() : "").append("\r\n");

@@ -72,15 +72,13 @@ import server.events.MapleFitness;
 import server.events.MapleOla;
 import server.events.MapleOxQuiz;
 import server.events.MapleSnowball;
-import server.maps.MapleMapObject;
-import server.shops.HiredMerchantSave;
 import tools.CollectionUtil;
 import tools.ConcurrentEnumMap;
 
 public class ChannelServer implements Serializable {
 
     public static long serverStartTime;
-    private int expRate, mesoRate, dropRate, cashRate, BossdropRate = 1;
+    private int expRate, mesoRate, dropRate, BossdropRate = 1;
     private int doubleExp = 1;
     private int doubleMeso = 1;
     private int doubleDrop = 1;
@@ -143,7 +141,6 @@ public class ChannelServer implements Serializable {
             mesoRate = Integer.parseInt(ServerProperties.getProperty("ZlhssMS.Meso"));
             dropRate = Integer.parseInt(ServerProperties.getProperty("ZlhssMS.Drop"));
             BossdropRate = Integer.parseInt(ServerProperties.getProperty("ZlhssMS.BDrop"));
-            cashRate = Integer.parseInt(ServerProperties.getProperty("ZlhssMS.Cash"));
             serverMessage = ServerProperties.getProperty("ZlhssMS.ServerMessage");
             serverName = ServerProperties.getProperty("ZlhssMS.ServerName");
             flags = Integer.parseInt(ServerProperties.getProperty("ZlhssMS.WFlags", "0"));
@@ -276,14 +273,6 @@ public class ChannelServer implements Serializable {
 
     public final void setExpRate(final int expRate) {
         this.expRate = expRate;
-    }
-
-    public final int getCashRate() {
-        return cashRate;
-    }
-
-    public final void setCashRate(final int cashRate) {
-        this.cashRate = cashRate;
     }
 
     public final int getChannel() {
