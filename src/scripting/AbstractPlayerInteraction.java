@@ -1266,7 +1266,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void gainPet(int id, String name, int level, int closeness, int fullness, long period) {//给予宠物
-        if (id > 5010000 || id < 5000000) {
+        if (!GameConstants.isPet(id)) {
             id = 5000000;
         }
         if (level > 30) {
