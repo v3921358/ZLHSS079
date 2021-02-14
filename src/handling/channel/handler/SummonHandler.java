@@ -114,20 +114,21 @@ public class SummonHandler {
     }
 
     public static final void DamageSummon(final SeekableLittleEndianAccessor slea, final MapleCharacter chr) {
-
         int objectId = slea.readInt();
-        int unkByte = slea.readByte();
+        int attackIdx = slea.readByte();
         int damage = slea.readInt();
+        if (attackIdx == 0xFE) { // to find out what it is
+            return;
+        }
         int monsterIdFrom = slea.readInt();
-        //       slea.readByte(); // stance
-
+        byte stance = slea.readByte(); // stance
         MapleSummon summon = (MapleSummon) chr.getMap().getMapObject(objectId, MapleMapObjectType.SUMMON);
         if (summon != null && summon.isPuppet() && summon.getOwnerId() == chr.getId()) { //We can only have one puppet(AFAIK O.O) so this check is safe.
             summon.addHP((short) -damage);
             if (summon.getHP() <= 0) {
                 chr.cancelEffectFromBuffStat(MapleBuffStat.PUPPET);
             }
-            chr.getMap().broadcastMessage(chr, MaplePacketCreator.damageSummon(chr.getId(), objectId, damage, unkByte, monsterIdFrom), summon.getPosition());
+            chr.getMap().broadcastMessage(chr, MaplePacketCreator.damageSummon(chr.getId(), objectId, damage, attackIdx, monsterIdFrom), summon.getPosition());
 
         }
     }

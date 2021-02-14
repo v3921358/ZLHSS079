@@ -2390,13 +2390,12 @@ public class MaplePacketCreator {
 
     public static MaplePacket 能量条(List<Pair<MapleBuffStat, Integer>> statups, int duration) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        // long mask = getLongMask(statups);
         mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
         writeLongMask(mplew, statups);
         mplew.write(0);
         mplew.write(0);
-        for (Pair stat : statups) {
-            mplew.writeInt(((Integer) stat.getRight()).shortValue());
+        for (Pair<MapleBuffStat, Integer> stat : statups) {
+            mplew.writeInt((stat.getRight()).shortValue());
             mplew.writeInt(0);
             mplew.write(0);
             mplew.writeInt(0);
