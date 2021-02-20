@@ -1939,13 +1939,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             if (write) {
                 client.getSession().write(MaplePacketCreator.cancelHoming());
             }
-        } else if (buffstats.contains(MapleBuffStat.骑兽技能)) {
-            /* if (write) {
-                stats.recalcLocalStats();
-            }*/
-            client.getSession().write(MaplePacketCreator.cancelBuffMONSTER(buffstats));
-            //  System.out.println("坐骑取消BUFF的mask："+buffstats);
-            map.broadcastMessage(this, MaplePacketCreator.cancelForeignBuffMONSTER(getId(), buffstats), false);
         } else {
             /*if (write) {
                 stats.recalcLocalStats();
