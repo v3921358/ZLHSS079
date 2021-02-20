@@ -370,15 +370,12 @@ public class DamageParse {
                                     monster.applyStatus(player, new MonsterStatusEffect(MonsterStatus.速度, eff.getX(), eff.getSourceId(), null, false), false, eff.getY() * 1000, false);
                                 }
                             }
-                            /* MapleStatEffect eff = player.getStatForBuff(MapleBuffStat.伤害反击);
-                            if ((eff != null) && (eff.makeChanceResult()) && (!monster.isBuffed(MonsterStatus.抗压))) {
-                                monster.applyStatus(player, new MonsterStatusEffect(MonsterStatus.抗压, Integer.valueOf(1), eff.getSourceId(), null, false), false, eff.getX() * 1000, true, eff);
-                            }*/
-                            if (player.getBuffedValue(MapleBuffStat.伤害反击) != null && !monster.getStats().isBoss()) {
-                                final MapleStatEffect eff = player.getStatForBuff(MapleBuffStat.伤害反击);
+                            
+                            if (player.getBuffedValue(MapleBuffStat.BODY_PRESSURE) != null && !monster.getStats().isBoss()) { //二月改
+                                final MapleStatEffect eff = player.getStatForBuff(MapleBuffStat.BODY_PRESSURE);
 
                                 if (eff != null && eff.makeChanceResult() && !monster.isBuffed(MonsterStatus.抗压)) {
-                                    monster.applyStatus(player, new MonsterStatusEffect(MonsterStatus.抗压, 1, eff.getSourceId(), null, false), false, eff.getX() * 1000, true);
+                                    monster.applyStatus(player, new MonsterStatusEffect(MonsterStatus.抗压, 1, eff.getSourceId(), null, false), false, eff.getX() * 1000, false);
                                 }
                             }
                             break;
