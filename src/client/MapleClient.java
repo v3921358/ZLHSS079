@@ -167,7 +167,7 @@ public class MapleClient implements Serializable {
     }
 
     public final List<MapleCharacter> loadCharacters(final int serverId) { // TODO make this less costly zZz
-        final List<MapleCharacter> chars = new LinkedList<MapleCharacter>();
+        final List<MapleCharacter> chars = new LinkedList<>();
 
         for (final CharNameAndId cni : loadCharactersInternal(serverId)) {
             final MapleCharacter chr = MapleCharacter.loadCharFromDB(cni.id, this, false);
