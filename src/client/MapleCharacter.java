@@ -4729,7 +4729,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
     }
 
     public final boolean hasDisease(final MapleDisease dis) {
-        return diseases.keySet().contains(dis);
+        return diseases.containsKey(dis);
     }/*
     //怪物给玩家BUFF
     public void giveDebuff(MapleDisease disease, MobSkill skill) {
