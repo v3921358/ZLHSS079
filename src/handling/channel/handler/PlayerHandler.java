@@ -429,21 +429,8 @@ public class PlayerHandler {
             short combo = chr.getCombo();
             final long curr = System.currentTimeMillis();
 
-            if (combo > 0 && (curr - chr.getLastCombo()) > 7000) {
-                // Official MS timing is 3.5 seconds, so 7 seconds should be safe.
-                //chr.getCheatTracker().registerOffense(CheatingOffense.ARAN_COMBO_HACK);
+            if (combo > 0 && (curr - chr.getLastCombo()) > 4000) {
                 combo = 0;
-                final ISkill skill = SkillFactory.getSkill(21000000);
-                final ISkill skillA = SkillFactory.getSkill(21110000);
-                if (combo <= 1 && skill != null) {
-                    //   chr.cancelEffect(skill.getEffect(1), false, -1);
-                    SkillFactory.getSkill(21000000).getEffect((short) 0).applyComboBuff(chr, (short) 0);
-
-                }
-                if (combo <= 1 && skillA != null) {
-                    //  chr.cancelEffect(skillA.getEffect(1), false, -1);
-                    SkillFactory.getSkill(21110000).getEffect((short) 0).applyComboBuffA(chr, (short) 0);
-                }
             }
             if (combo < 30000) {
                 combo++;
@@ -451,28 +438,13 @@ public class PlayerHandler {
             chr.setLastCombo(curr);
             chr.setCombo(combo);
 
-            switch (combo) { // Hackish method xD
-                case 10:
-                case 20:
-                case 30:
-                case 40:
-                case 50:
-                case 60:
-                case 70:
-                case 80:
-                case 90:
-                case 100:
+            c.sendPacket(MaplePacketCreator.testCombo(combo));
 
-                    if (chr.getSkillLevel(21000000) >= (combo / 10)) {
-                        SkillFactory.getSkill(21000000).getEffect(combo / 10).applyComboBuff(chr, combo);
-                    }
-                    if (chr.getSkillLevel(21110000) >= (combo / 10)) {
-                        SkillFactory.getSkill(21110000).getEffect(combo / 10).applyComboBuffA(chr, combo);
-                    }
-                    break;
+            if (combo > 0 && combo % 10 == 0) {
+                if (chr.getSkillLevel(21000000) >= (combo / 10)) {
+                    SkillFactory.getSkill(21000000).getEffect(combo / 10).applyComboBuff(chr, combo);
+                }
             }
-            c.getSession().write(MaplePacketCreator.testCombo(combo));
-            chr.setLastCombo(curr);
         }
     }
 
