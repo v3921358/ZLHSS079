@@ -143,6 +143,13 @@ public class MovementParse {
                     res.add(tm);
                     break;
                 }
+                case 21: {
+                    final byte newstate = lea.readByte();
+                    final short duration = lea.readShort();
+                    final AranMovement tm = new AranMovement(command, new Point(0, 0), duration, newstate);
+                    res.add(tm);
+                    break;
+                }
                 default:
                     System.out.println("移动类型: " + kind + ", 剩下的 : " + (numCommands - res.size()) + " 新的移动类型 ID : " + command + ", 封包 : " + lea.toString(true));
                     return null;
