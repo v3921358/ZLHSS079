@@ -449,19 +449,15 @@ public class PlayerHandler {
     }
 
     public static final void UseItemEffect(SeekableLittleEndianAccessor slea, MapleClient c, MapleCharacter chr) {
-        System.out.println("啊啊啊啊AA");
         int itemId = slea.readInt();
-        if (itemId == 4270000) {
-            System.out.println("ss");
-        }
         IItem toUse;
-        if ((itemId == 4290001) || (itemId == 4290000)) //倒霉鸡  金鸡  效果
+        if (itemId == 4290001 || itemId == 4290000) //倒霉鸡  金鸡  效果
         {
             toUse = c.getPlayer().getInventory(MapleInventoryType.ETC).findById(itemId);
         } else {
             toUse = c.getPlayer().getInventory(MapleInventoryType.CASH).findById(itemId);
         }
-        if ((itemId != 0) && (toUse == null)) {
+        if (itemId != 0 && toUse == null) {
             return;
         }
         c.getPlayer().setItemEffect(itemId);
