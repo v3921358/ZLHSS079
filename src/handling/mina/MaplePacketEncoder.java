@@ -105,7 +105,7 @@ public class MaplePacketEncoder implements ProtocolEncoder {
                 mutex.unlock();
             }
             System.arraycopy(unencrypted, 0, ret, 4, unencrypted.length); // Copy the unencrypted > "ret"
-            out.write(IoBuffer.wrap(ret));
+            session.write(IoBuffer.wrap(ret));
         } else { // no client object created yet, send unencrypted (hello)
             out.write(IoBuffer.wrap(((MaplePacket) message).getBytes()));
             // out.write(ByteBuffer.wrap(((byte[]) message)));
