@@ -350,16 +350,5 @@ public class LoginPacket {
         PacketHelper.addCharStats(mplew, chr);
         PacketHelper.addCharLook(mplew, chr, true, viewAll);
         mplew.write(0); //<-- who knows
-        if (chr.getJob() == 900) {
-            mplew.write(2);
-            return;
-        }
-        /* mplew.write(ranking ? 1 : 0);
-        if (ranking) {
-            mplew.writeInt(chr.getRank());
-            mplew.writeInt(chr.getRankMove());
-            mplew.writeInt(chr.getJobRank());
-            mplew.writeInt(chr.getJobRankMove());
-        }*/
     }
 }
