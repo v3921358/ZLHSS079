@@ -326,25 +326,9 @@ public class PlayerHandler {
                     }
                 }
             }
-            if (damage == -1) {
-                Integer pguard = chr.getBuffedValue(MapleBuffStat.伤害反击);//伤害反击
-                if (pguard != null) {
-                    attacker = (MapleMonster) chr.getMap().getMapObject(oid, null);
-                    if (attacker != null) {//攻击者
-                        int 反击伤害 = (int) (damage * (pguard.doubleValue() / 100.0D));
-                        反击伤害 = (int) Math.min(反击伤害, attacker.getMobMaxHp() / 10);
-                        attacker.damage(chr, damage, true);
-                        damage -= 反击伤害;
-                        chr.getMap().broadcastMessage(chr, MobPacket.damageMonster(oid, damage), chr.getPosition());
-                        chr.checkMonsterAggro(attacker);
-                        c.getPlayer().setHp(c.getPlayer().getHp() - damage);
-                    }
-                }
-            }
-            Integer 战神抗压 = chr.getBuffedValue(MapleBuffStat.伤害反击);//伤害反击
-            if ((战神抗压 != null) && (damage > 0)) { //抗压的wz为 x = 5<怪物变弱几率>  damage为伤害正常值
-                attacker = (MapleMonster) chr.getMap().getMapObject(oid, MapleMapObjectType.MONSTER);
-                if (attacker != null) { //攻击者
+         
+            final MapleStatEffect bouncedam_A = chr.getStatForBuff(MapleBuffStat.BODY_PRESSURE);
+            if (attacker != null && bouncedam_A != null && damage > 0) {
                     ISkill 抗压 = SkillFactory.getSkill(21101003); //抗压
                     int 抗压伤害 = (int) ((抗压.getEffect(chr.getSkillLevel(21101003)).getDamage() / 100.0) * damage);
                     attacker.damage(chr, 抗压伤害, true);
@@ -354,6 +338,7 @@ public class PlayerHandler {
                     c.getPlayer().setHp(c.getPlayer().getHp() - damage);
                 }
             }
+     
             final MapleStatEffect magicShield = chr.getStatForBuff(MapleBuffStat.MAGIC_SHIELD);
             if (magicShield != null) {
                 damage -= (int) ((magicShield.getX() / 100.0) * damage);
@@ -417,12 +402,15 @@ public class PlayerHandler {
             } else {
                 chr.addMPHP(-damage, -mpattack);
             }
-            chr.handleBattleshipHP(-damage);
-        }
+            //判断技能BUFF存在
+            if (chr.isActiveBuffedValue(21120007)) {
+                damage -= damage % chr.getSkillLevel(21120007);
+            }
+            chr.handleBattleshipHP(-damage);    
         if (!chr.isHidden()) {
             chr.getMap().broadcastMessage(chr, MaplePacketCreator.damagePlayer(type, monsteridfrom, chr.getId(), damage, fake, direction, reflect, is_pg, oid, pos_x, pos_y), false);
         }
-    }
+    }    
 
     public static final void AranCombo(final MapleClient c, final MapleCharacter chr) {
         if (chr != null && chr.getJob() >= 2000 && chr.getJob() <= 2112) {
@@ -613,13 +601,14 @@ public class PlayerHandler {
     }
 
     public static final void closeRangeAttack(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr, final boolean energy) {
-        if (chr == null || (energy && chr.getBuffedValue(MapleBuffStat.ENERGY_CHARGE) == null && chr.getBuffedValue(MapleBuffStat.伤害反击) == null && !GameConstants.isKOC(chr.getJob()))) {
+        if (chr == null || (energy && chr.getBuffedValue(MapleBuffStat.ENERGY_CHARGE) == null && chr.getBuffedValue(MapleBuffStat.BODY_PRESSURE) == null && !GameConstants.isKOC(chr.getJob()))) {
             return;
         }
-        if (!chr.isAlive() || chr.getMap() == null) {
-            chr.getCheatTracker().registerOffense(CheatingOffense.人物死亡攻击);
-            return;
-        }
+//        if (!chr.isAlive() || chr.getMap() == null) {
+//            chr.getCheatTracker().registerOffense(CheatingOffense.人物死亡攻击);
+//            return;
+//        }
+     
         final AttackInfo attack = DamageParse.Modify_AttackCrit(DamageParse.parseDmgM(slea, chr), chr, 1);
         final boolean mirror = chr.getBuffedValue(MapleBuffStat.MIRROR_IMAGE) != null;
         final boolean hasCygnusDarkSightState = chr.getBuffSource(MapleBuffStat.DARKSIGHT) == 14001003;
@@ -630,10 +619,7 @@ public class PlayerHandler {
         if ((attack.skill == 21100004) || (attack.skill == 21100005) || (attack.skill == 21110003) || (attack.skill == 21110004) || (attack.skill == 21120006) || (attack.skill == 21120007)) {
             chr.setCombo((byte) 1);
         }
-        if (hasCygnusDarkSightState && attack.skill != 14100005) {
-            chr.dropMessage("夜行者隐身状态除非使用驱逐技能。其他技能均无效！");
-            return;
-        }
+
 
         if (attack.skill != 0) {
             skill = SkillFactory.getSkill(GameConstants.getLinkedAranSkill(attack.skill));
